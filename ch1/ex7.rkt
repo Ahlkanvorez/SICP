@@ -16,9 +16,7 @@
 (define (relative-good-enough? guess x)
         (let ((improved (improve guess x))
               (threshold 0.0001))
-             (if (> guess improved)
-                 (< (- guess (improve guess x)) threshold)
-                 (< (- improved guess) threshold))))
+             (< (abs (- guess improved)) threshold)))
 
 ;; Testing
 (define (test guess)
