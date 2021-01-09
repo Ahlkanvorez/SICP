@@ -51,3 +51,10 @@
     (is (= 5 (ch1/sum-larger-squares 1 0 2)))
 
     (is (= 5 (ch1/sum-larger-squares 0 2 1)))))
+
+(deftest ex4-test
+  (testing "a+abs-b"
+    (is (= 11 (ch1/a+abs-b 5 6)))
+
+    (is (= 11 (ch1/a+abs-b 5 -6)))))
+

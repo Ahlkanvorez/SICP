@@ -9,3 +9,12 @@
                   [a (max b c)]
                   [a-b a-c])]
       (sum-of-squares m n))))
+
+(defn a+abs-b
+  "Perform a + |b|
+
+  This utilizes the fact that ifs are expressions with value
+  to determine the appropriate operator (+ or -) based on the
+  sign of b, without recourse to an absolute value function."
+  [a b]
+  ((if (> b 0) + -) a b))
