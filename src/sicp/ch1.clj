@@ -1,14 +1,16 @@
 (ns sicp.ch1)
 
+(defn square [x] (* x x))
+
+(defn sum-of-squares [a b] (+ (square a) (square b)))
+
 (defn sum-larger-squares [a b c]
-  (letfn [(square [x] (* x x))
-          (sum-of-squares [a b] (+ (square a) (square b)))]
-    (let [a-b (max a b)
-          a-c (max a c)
-          [m n] (if (= a-b a-c)
-                  [a (max b c)]
-                  [a-b a-c])]
-      (sum-of-squares m n))))
+  (let [a-b (max a b)
+        a-c (max a c)
+        [m n] (if (= a-b a-c)
+                [a (max b c)]
+                [a-b a-c])]
+    (sum-of-squares m n)))
 
 (defn a+abs-b
   "Perform a + |b|
@@ -27,3 +29,21 @@
       0
       y)))
 
+(defn new-if [condition then-clause else-clause]
+  (cond condition then-clause :else else-clause))
+
+(defn abs [x] (if (< x 0) (- x) x))
+
+(defn average [a b] (/ (+ a b) 2))
+
+(comment
+  (defn sqrt-iter [guess x]
+    (letfn [(good-enough? [guess x]
+              (< (abs (- (square guess) x))
+                 0.001))
+            (improve [guess x]
+              (average guess (/ x guess)))]
+      (new-if (good-enough? guess x)
+              guess
+              (sqrt-iter (improve guess x)
+                         x)))))

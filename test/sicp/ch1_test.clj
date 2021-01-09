@@ -58,7 +58,7 @@
 
     (is (= 11 (ch1/a+abs-b 5 -6)))))
 
-(comment ;; ex5-test
+(comment ;; ex5-test ; invoking (test 0 (p))
   "Invocations of (ch1/test 0 (ch1/p)) will never"
   " terminate, as long as test is a normal function;"
   " i.e. it uses applicative order evaluation, which"
@@ -67,4 +67,12 @@
   " If test is a macro, i.e. it uses normal order"
   " evaluation, then it will not evaluate p until it"
   " needs the value, so 0 will be returned.")
+
+(comment ;; ex6-test : sqrt-iter using new-if
+  "new-if is a function, not a macro, so its arguments are"
+  " evaluated before it is invoked (applicative order)."
+  " Consequently, the sqrt-iter function will loop forever,"
+  " as each invocation of new-if in sqrt-iter will result"
+  " in another sqrt-iter call. This will stack overflow,"
+  " since the function is not tail recursive.")
 
