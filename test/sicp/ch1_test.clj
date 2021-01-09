@@ -1,5 +1,5 @@
 (ns sicp.ch1-test
-  (:require [clojure.test :refer [deftest is]]
+  (:require [clojure.test :refer [deftest is testing]]
             [sicp.ch1 :as ch1]))
 
 (deftest ex1-test
@@ -43,3 +43,11 @@
   (is (= -37/150
          (/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5)))))
             (* 3 (- 6 2) (- 2 7))))))
+
+(deftest ex3-test
+  (testing "sum-larger-squares"
+    (is (= 5 (ch1/sum-larger-squares 1 2 0)))
+
+    (is (= 5 (ch1/sum-larger-squares 1 0 2)))
+
+    (is (= 5 (ch1/sum-larger-squares 0 2 1)))))
