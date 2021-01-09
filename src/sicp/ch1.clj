@@ -89,4 +89,30 @@
     b
     (recur (dec a) (inc b))))
 
+(defn A
+  "Ackermann's function
+
+  Note that the definition here (as given in the book)
+  differs from the one on Wikipedia."
+  [x y]
+  (cond (zero? y) 0
+        (zero? x) (* 2 y)
+        (= 1 y) 2
+        :else (A (dec x) (A x (dec y)))))
+
+(defn f
+  "(A 0 n) = 2n"
+  [n] (A 0 n))
+
+(defn g
+  "(A 1 n) = 2^n"
+  [n]
+  (A 1 n))
+
+(defn h
+  "(A 2 n) = 2^^n
+   (A 2 n) = 2^^(n + 3) - 3
+  where ^^ is the knuth up-arrow, tetration"
+  [n]
+  (A 2 n))
 
