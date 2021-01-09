@@ -134,3 +134,10 @@
                     (+ (get memo (dec m))
                        (* 2 (get memo (- m 2)))
                        (* 3 (get memo (- m 3)))))))))
+
+(defn pascal [r c]
+  (if (or (zero? r) (zero? c) (= r c))
+    1
+    (+ (pascal (dec r) c)
+       (pascal (dec r) (dec c)))))
+

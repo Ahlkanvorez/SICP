@@ -296,3 +296,41 @@
     (is (= 4 (ch1/iterative-f 3)))
 
     (is (= 11 (ch1/iterative-f 4)))))
+
+(deftest ex11-test
+  (testing "pascal"
+    ;;   0 1 2 3 4
+    ;; 0 1
+    ;; 1 1 1
+    ;; 2 1 2 1
+    ;; 3 1 3 3 1
+    ;; 4 1 4 6 4 1
+    (is (= 1 (ch1/pascal 0 0)))
+
+    (is (= 1 (ch1/pascal 1 0)))
+
+    (is (= 1 (ch1/pascal 1 1)))
+
+    (is (= 1 (ch1/pascal 2 0)))
+
+    (is (= 2 (ch1/pascal 2 1)))
+
+    (is (= 1 (ch1/pascal 2 2)))
+
+    (is (= 1 (ch1/pascal 3 0)))
+
+    (is (= 3 (ch1/pascal 3 1)))
+
+    (is (= 3 (ch1/pascal 3 2)))
+
+    (is (= 1 (ch1/pascal 3 3)))
+
+    (is (= 1 (ch1/pascal 4 0)))
+
+    (is (= 4 (ch1/pascal 4 1)))
+
+    (is (= 6 (ch1/pascal 4 2)))
+
+    (is (= 4 (ch1/pascal 4 3)))
+
+    (is (= 1 (ch1/pascal 4 4)))))
