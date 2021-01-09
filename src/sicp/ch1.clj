@@ -18,3 +18,12 @@
   sign of b, without recourse to an absolute value function."
   [a b]
   ((if (> b 0) + -) a b))
+
+(comment
+  (defn p [] (p))
+
+  (defn test [x y]
+    (if (= x 0)
+      0
+      y)))
+

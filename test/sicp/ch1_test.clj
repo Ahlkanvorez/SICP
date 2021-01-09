@@ -58,3 +58,13 @@
 
     (is (= 11 (ch1/a+abs-b 5 -6)))))
 
+(comment ;; ex5-test
+  "Invocations of (ch1/test 0 (ch1/p)) will never"
+  " terminate, as long as test is a normal function;"
+  " i.e. it uses applicative order evaluation, which"
+  " will attempt to evaluate the infinitely recursive"
+  " definition of p."
+  " If test is a macro, i.e. it uses normal order"
+  " evaluation, then it will not evaluate p until it"
+  " needs the value, so 0 will be returned.")
+
