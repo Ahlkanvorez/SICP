@@ -149,7 +149,7 @@
     ;; = 9
     ))
 
-(deftest ch10-test
+(deftest ex10-test
   (testing "A"
     (is (= 1024 (ch1/A 1 10)))
     ;; > (A 1 10) 
@@ -273,3 +273,26 @@
       (is (= (tetrate 2 3) (ch1/h 3)))
  
       (is (= (tetrate 2 4) (ch1/h 4))))))
+
+(deftest ex11-test
+  (testing "recursive-f"
+    (is (= 0 (ch1/recursive-f 0)))
+
+    (is (= 1 (ch1/recursive-f 1)))
+
+    (is (= 2 (ch1/recursive-f 2)))
+
+    (is (= 4 (ch1/recursive-f 3)))
+
+    (is (= 11 (ch1/recursive-f 4))))
+
+  (testing "iterative-f"
+    (is (= 0 (ch1/iterative-f 0)))
+
+    (is (= 1 (ch1/iterative-f 1)))
+
+    (is (= 2 (ch1/iterative-f 2)))
+
+    (is (= 4 (ch1/iterative-f 3)))
+
+    (is (= 11 (ch1/iterative-f 4)))))

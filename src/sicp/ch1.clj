@@ -116,3 +116,21 @@
   [n]
   (A 2 n))
 
+(defn recursive-f [n]
+  (cond (< n 3) n
+        :else (+ (recursive-f (dec n))
+                 (* 2 (recursive-f (- n 2)))
+                 (* 3 (recursive-f (- n 3))))))
+
+(defn iterative-f [n]
+  (loop [m 3
+         memo {0 0
+               1 1
+               2 2}]
+    (if (> m n)
+      (get memo n)
+      (recur (inc m)
+             (assoc memo m
+                    (+ (get memo (dec m))
+                       (* 2 (get memo (- m 2)))
+                       (* 3 (get memo (- m 3)))))))))
