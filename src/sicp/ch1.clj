@@ -78,3 +78,15 @@
   (if (cbrt-good-enough? guess x)
     guess
     (recur (cbrt-improve guess x) x)))
+
+(defn +-recursive [a b]
+  (if (= a 0)
+    b
+    (inc (+-recursive (dec a) b))))
+
+(defn +-iterative [a b]
+  (if (= a 0)
+    b
+    (recur (dec a) (inc b))))
+
+

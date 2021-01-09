@@ -122,4 +122,30 @@
     (is (< (- (ch1/cbrt 1 64) 4)
            0.001))))
 
+(deftest ex9-test
+  (testing "+-recursive"
+    (is (= 9 (ch1/+-recursive 4 5)))
+    ;; Where + = +_recursive:
+    ;; > (+ 4 5)
+    ;; = (inc (+ 3 5))
+    ;; = (inc (inc (+ 2 5)))
+    ;; = (inc (inc (inc (+ 1 5))))
+    ;; = (inc (inc (inc (inc (+ 0 5)))))
+    ;; = (inc (inc (inc (inc 5))))
+    ;; = (inc (inc (inc 6)))
+    ;; = (inc (inc 7))
+    ;; = (inc 8)
+    ;; = 9
+    )
+
+  (testing "+-iterative"
+    (is (= 9 (ch1/+-iterative 4 5)))
+    ;; Where + = +_iterative
+    ;; > (+ 4 5)
+    ;; = (+ 3 6)
+    ;; = (+ 2 7)
+    ;; = (+ 1 8)
+    ;; = (+ 0 9)
+    ;; = 9
+    ))
 
