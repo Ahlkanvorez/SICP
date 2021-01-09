@@ -76,3 +76,37 @@
   " in another sqrt-iter call. This will stack overflow,"
   " since the function is not tail recursive.")
 
+(deftest ex7-test
+  (testing "sqrt with objective-good-enough?"
+    (let [sqrt (ch1/sqrt ch1/objective-good-enough?)]
+      (is (< (- (sqrt 1 16) 4)
+             0.0001))
+
+      (is (< (- (sqrt 300000 100000000000) 316227.7660)
+             0.0001))
+
+      (comment
+        "The following test will fail, because the"
+        " objective test effectiveness decreases more"
+        " rapidly as the value approaches and becomes less"
+        " than the threshold."
+        (is (< (- (sqrt 0.1 0.000000001) 0.00001)
+               0.0001)))))
+
+  (testing "sqrt with relative-good-enough?"
+    (let [sqrt (ch1/sqrt ch1/relative-good-enough?)]
+      (is (< (- (sqrt 1 16) 4)
+             0.0001))
+
+      (is (< (- (sqrt 300000 100000000000) 316227.7660)
+             0.0001))
+
+      (comment
+        "The following test will fail for a similar reason"
+        " to why the equivalent objective test will fail,"
+        " however the relative test results in a much closer"
+        " value to the actual solution, since the threshold"
+        " has a lessened impact since it is compared with"
+        " a relative difference."
+        (is (< (- (sqrt 0.1 0.000000001) 0.00001)
+               0.0001))))))

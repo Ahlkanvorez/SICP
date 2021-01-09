@@ -47,3 +47,20 @@
               guess
               (sqrt-iter (improve guess x)
                          x)))))
+
+(defn improve [guess x] (average guess (/ x guess)))
+
+(defn objective-good-enough? [guess x]
+  (< (abs (- (square guess) x))
+     0.0001))
+
+(defn relative-good-enough? [guess x]
+  (let [improved (improve guess x)
+        threshold 0.0001]
+    (< (abs (- guess improved)) threshold)))
+
+(defn sqrt [good-enough?]
+  (fn [guess x]
+    (if (good-enough? guess x)
+      guess
+      (recur (improve guess x) x))))
