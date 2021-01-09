@@ -110,3 +110,16 @@
         " a relative difference."
         (is (< (- (sqrt 0.1 0.000000001) 0.00001)
                0.0001))))))
+
+(deftest ex8-test
+  (testing "cbrt"
+    (is (< (- (ch1/cbrt 1 8) 2)
+           0.001))
+
+    (is (< (- (ch1/cbrt 1 18) 3)
+           0.001))
+
+    (is (< (- (ch1/cbrt 1 64) 4)
+           0.001))))
+
+

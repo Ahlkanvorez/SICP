@@ -64,3 +64,17 @@
     (if (good-enough? guess x)
       guess
       (recur (improve guess x) x))))
+
+(defn cube [x] (* x (square x)))
+
+(defn cbrt-improve [guess x]
+  (/ (+ (/ x (square guess)) (* 2 guess))
+     3))
+
+(defn cbrt-good-enough? [guess x]
+  (< (abs (- (cube guess) x)) 0.001))
+
+(defn cbrt [guess x]
+  (if (cbrt-good-enough? guess x)
+    guess
+    (recur (cbrt-improve guess x) x)))
