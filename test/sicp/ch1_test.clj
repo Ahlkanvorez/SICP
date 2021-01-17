@@ -626,3 +626,24 @@
               0)
            4]))))
 
+(deftest ex15-test
+  (is (= 6 ;; ex 1.15.a: sine is called 6 times
+         ;; ex 1.15.b: N reduces by a factor of 3 each time, and the
+         ;; process gains one stack frame per reduction, which is a
+         ;; logarithmic rate; thus it requires O(log N) stack space,
+         ;; performing O(log N) steps.
+         (+ 1 ;; (sine 12.15)
+            1 ;; (p (sine 4.05))
+            1 ;; (p (p (sine 1.3499999999999999)))
+            1 ;; (p (p (p (sine 0.44999999999999996))))
+            1 ;; (p (p (p (p (sine 0.15)))))
+            1 ;; (p (p (p (p (p (sine 0.049999999999999996))))))
+            )))
+  (is (= (ch1/sine 12.15)
+         (ch1/p
+          (ch1/p
+           (ch1/p
+            (ch1/p
+             (ch1/p
+              (ch1/sine 0.049999999999999996)))))))))
+
