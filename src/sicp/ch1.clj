@@ -196,3 +196,38 @@
       (if (odd? n)
         (recur (dec n) b (* a b))
         (recur (/ n 2) (square b) a)))))
+
+(defn fast-*
+  "Ex 1.17: Compute a*b in O(lg n) time, O(1) space.
+  This is based on the same observation as fast-expt-iter regarding
+  binary methods (see Knuth 4.6.3, specifically vol 2 ed 3 pg 462).
+  First observe:
+    ab = (2a)(b/2) = (a + a)(b/2)   when 2 | a
+    ab = a(b - 1) + a               otherwise
+
+  Then, in the loop, define x such that x + ab remains constant each
+  iteration:
+    b -> b - 1; x + ab = x + (a(b - 1) + a) = (b - 1)a + (x + a)
+      thus (dec b) a (+ x a)
+
+    b -> b / 2; x + ab = x + (2a)(b / 2) = (b / 2)(a + a) + x
+      thus (/ b 2) (+ a a) x.
+
+  These two procedures illustrate a general binary method for optimizing
+  recursive logarithmic procedures into iterative ones, via an invariant
+  combination of the loop variables. Note the mappings of functions
+  between the expt example and this one:
+      ^   ->   *
+      *   ->   +
+   square -> double
+    sqrt  -> halve
+"
+  [a b]
+  (loop [b b
+         a a
+         x 0]
+    (if (= b 0)
+      x
+      (if (odd? b)
+        (recur (dec b) a (+ x a))
+        (recur (/ b 2) (+ a a) x)))))

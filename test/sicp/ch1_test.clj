@@ -651,3 +651,8 @@
   (dotimes [n 10]
     (dotimes [m 10]
       (is (= (ch1/fast-expt n m) (ch1/fast-expt-iter n m))))))
+
+(deftest ex17-test
+  (dotimes [n 10]
+    (dotimes [m 10]
+      (is (= (* n m) (ch1/fast-* n m))))))
