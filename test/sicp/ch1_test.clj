@@ -647,3 +647,7 @@
              (ch1/p
               (ch1/sine 0.049999999999999996)))))))))
 
+(deftest ex16-test
+  (dotimes [n 10]
+    (dotimes [m 10]
+      (is (= (ch1/fast-expt n m) (ch1/fast-expt-iter n m))))))

@@ -164,3 +164,35 @@
   (if (not (> (abs angle) 0.1))
     angle
     (p (sine (/ angle 3.0)))))
+
+(defn expt [b n]
+  (if (= n 0)
+    1
+    (* b (expt b (dec n)))))
+
+(defn fast-expt [b n]
+  (cond (zero? n) 1
+        (even? n) (square (fast-expt b (/ n 2)))
+        :else (* b (fast-expt b (dec n)))))
+
+(defn fast-expt-iter
+  "Ex. 1.16: Compute b^n in O(lg n) time, O(1) space.
+  This implements the following in an iterative recursive process:
+    b^n = (b^(n/2))^2     when 2 | n
+    b^n = b * b^(n - 1)   otherwise.
+
+  In the loop, a is defined such that a(b^n) remains constant in each
+  iteration. The changes in each recur are thus derived:
+  b -> b - 1; a(b^n) -> (ab)b^(n - 1)
+    thus (* a b), b, (dec n)
+  b -> b / 2; a(b^n) -> a(b^(n/2))b^(n/2) = a(b^(n/2))^2 = a(b^2)^(n/2)
+    thus a, (square b), (/ n 2)."
+  [b n]
+  (loop [n n
+         b b
+         a 1]
+    (if (= n 0)
+      a
+      (if (odd? n)
+        (recur (dec n) b (* a b))
+        (recur (/ n 2) (square b) a)))))
