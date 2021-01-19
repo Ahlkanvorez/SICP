@@ -197,8 +197,13 @@
         (recur (dec n) b (* a b))
         (recur (/ n 2) (square b) a)))))
 
-(defn fast-*
-  "Ex 1.17: Compute a*b in O(lg n) time, O(1) space.
+(defn fast-* [a b]
+  (cond (zero? b) 1
+        (even? b) (* 2 (fast-* a (/ b 2)))
+        :else (+ a (fast-* a (dec b)))))
+
+(defn fast-*-iter
+  "Ex 1.18: Compute a*b in O(lg n) time, O(1) space.
   This is based on the same observation as fast-expt-iter regarding
   binary methods (see Knuth 4.6.3, specifically vol 2 ed 3 pg 462).
   First observe:
