@@ -658,6 +658,6 @@
       (is (= (* n m) (ch1/fast-* n m))))))
 
 (deftest ex18-test
-  (dotimes [n 10]
-    (dotimes [m 10]
-      (is (= (* n m) (ch1/fast-*-iter n m))))))
+  (for [n (range 10)
+        m (range 10)]
+    (is (= (* n m) (ch1/fast-*-iter n m)))))
