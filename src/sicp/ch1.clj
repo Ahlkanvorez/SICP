@@ -198,7 +198,7 @@
         (recur (/ n 2) (square b) a)))))
 
 (defn fast-* [a b]
-  (cond (zero? b) 1
+  (cond (zero? b) 0
         (even? b) (* 2 (fast-* a (/ b 2)))
         :else (+ a (fast-* a (dec b)))))
 
