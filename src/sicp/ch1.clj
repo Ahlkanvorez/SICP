@@ -236,3 +236,21 @@
       (if (odd? b)
         (recur (dec b) a (+ x a))
         (recur (/ b 2) (+ a a) x)))))
+
+(defn log-fib
+  "TODO: Add the mathematical explanation from my handwritten notes here."
+  [a b p q n]
+  (cond (zero? n) b
+        (even? n) (recur a
+                         b
+                         (+ (square p) (square q))
+                         (+ (square q) (* 2 p q))
+                         (quot n 2))
+        :else (recur (+ (* b q) (* a q) (* a p))
+                     (+ (* b p) (* a q))
+                     p
+                     q
+                     (dec n))))
+
+(defn fib [n]
+  (log-fib 1 0 0 1 n))

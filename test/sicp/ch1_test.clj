@@ -661,3 +661,7 @@
   (doseq [n (range 10)]
     (doseq [m (range 10)]
       (is (= (* n m) (ch1/fast-*-iter n m))))))
+
+(deftest ex19-test
+  (doseq [[fib-n idx] (map vector [0 1 1 2 3 5 8 13 21] (range))]
+    (is (= fib-n (ch1/fib idx)))))
