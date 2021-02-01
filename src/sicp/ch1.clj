@@ -141,6 +141,14 @@
     (+ (pascal (dec r) c)
        (pascal (dec r) (dec c)))))
 
+(defn fib-iter [n]
+  (loop [a 1
+         b 0
+         n n]
+    (if (zero? n)
+      b
+      (recur (+ a b) a (dec n)))))
+
 (defn first-denomination [kinds-of-coins]
   (case kinds-of-coins
     1 1
@@ -237,20 +245,84 @@
         (recur (dec b) a (+ x a))
         (recur (/ b 2) (+ a a) x)))))
 
-(defn log-fib
-  "TODO: Add the mathematical explanation from my handwritten notes here."
-  [a b p q n]
-  (cond (zero? n) b
-        (even? n) (recur a
-                         b
-                         (+ (square p) (square q))
-                         (+ (square q) (* 2 p q))
-                         (quot n 2))
-        :else (recur (+ (* b q) (* a q) (* a p))
-                     (+ (* b p) (* a q))
-                     p
-                     q
-                     (dec n))))
+(defn fib
+  "Compute the nth fibonacci number in O(log n) time and O(1) space.
 
-(defn fib [n]
-  (log-fib 1 0 0 1 n))
+  This solution builds on the classic iterative O(n) algorithm for
+  calculating fibonacci numbers using the same insight that produces
+  logarithmic exponentiation and multiplication algorithms from their
+  linear iterative variants. For context, recall that the nth fibonacci
+  number can be computed in O(n) time and O(1) space as follows:
+  Observe the transformation T(a, b) = [a + b, a], and note that
+  T^n[1 0] = [fib(n + 1), fib(n)]. Moreover, note that T is a linear
+  map, and thus has a matrix representation:
+
+  M(T) = [ 1 1 ] since [ 1 1 ][ a ] = [ a + b ]
+         [ 1 0 ]       [ 1 0 ][ b ] = [   a   ]
+
+  Now, recall that the logarithmicizing process from before involved
+  identifying a \"square\" or \"double\" operation, by which we can
+  reduce the remaining operations to perform by half. In that light,
+  observe the forms of M^2(T) and M^4(T):
+
+  M^2(T) = [ 1 1 ][ 1 1 ] = [ 2 1 ]
+           [ 1 0 ][ 1 0 ]   [ 1 1 ]
+
+  M^4(T) = [ 2 1 ][ 2 1 ] = [ 5 3 ]
+           [ 1 1 ][ 1 1 ]   [ 3 2 ]
+
+  Now, observe a pattern (not proven in general here) that these
+  matrices are of the form [ a + b  b ]
+                           [   b    a ].
+
+  Then, to \"double\" or \"square\" a matrix M^2k(T), we can identify
+  the square of that general form (assuming * is commutative here):
+
+  [ a + b  b ][ a + b  b ] = [ a^2 + 2ab + 2b^2  2ab + b^2 ]
+  [   b    a ][   b    a ]   [    2ab + b^2      a^2 + b^2 ]
+
+  Now, this matrix is also of the pattern noted above, where
+    p = a^2 +       b^2
+    q =       2ab + b^2
+
+  since
+    p + q = a^2 + 2ab + 2b^2.
+
+  Thus, when we are at a stage of the algorithm with an even n, we
+  can \"square the transformation\" by replacing p & q with those new
+  values to halve n and reach the result in a logarithmic number of
+  steps.
+
+  The next piece to the solution is identifying the transform for the
+  case where n is odd, in which we want to apply the above transform
+  once instead of squaring the transform. We can identify the formulas
+  by multiplying the matrix of the pattern above with [ a b ]:
+
+  [ p + q   q ][ a ] = [ pa + qa + qb ]
+  [   q     p ][ b ]   [    qa + pb   ]
+
+  Lastly, observe that the initial values of p & q are given by the
+  matrix form of T:
+
+  [ p + q  q ] = [ 1 1 ]
+  [   q    p ] = [ 1 0 ],
+
+  so p = 0, q = 1.
+  "
+  [n]
+  (loop [a 1
+         b 0
+         p 0
+         q 1
+         n n]
+    (cond (zero? n) b
+          (even? n) (recur a
+                           b
+                           (+ (square p) (square q))
+                           (+ (* 2 p q) (square q))
+                           (quot n 2))
+          :else (recur (+ (* p a) (* q a) (* q b))
+                       (+ (* q a) (* p b))
+                       p
+                       q
+                       (dec n)))))
