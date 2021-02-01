@@ -665,3 +665,33 @@
 (deftest ex19-test
   (doseq [n (range 92)]
     (is (= (ch1/fib-iter n) (ch1/fib n)))))
+
+(deftest ex20-test
+  ;; Applicative order evaluation: 4 remainder operations
+  (is (= (ch1/gcd 206 40)
+         (ch1/gcd 40 6)   ;; (mod 206 40) => 6
+         (ch1/gcd 6 4)    ;; (mod 40 6)   => 4
+         (ch1/gcd 4 2)    ;; (mod 6 4)    => 2
+         (ch1/gcd 2 0)    ;; (mod 4 2)    => 0
+         2))
+
+  ;; Normal order evaluation: 21 remainder operations
+  (is (= (ch1/gcd 206 40)
+         (ch1/gcd 40 (mod 206 40))
+         (ch1/gcd (mod 206 40)
+                  (mod 40
+                       (mod 206 40)))
+         (ch1/gcd (mod 40
+                       (mod 206 40))
+                  (mod (mod 206 40)
+                       (mod 40
+                            (mod 206 40))))
+         (ch1/gcd (mod (mod 206 40)
+                       (mod 40
+                            (mod 206 40)))
+                  (mod (mod 40
+                            (mod 206 40))
+                       (mod (mod 206 40)
+                            (mod 40
+                                 (mod 206 40)))))))
+  )
