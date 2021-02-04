@@ -357,3 +357,23 @@
   (cond (zero? times) true
         (fermat-test n) (recur n (dec times))
         :else false))
+
+(defmacro runtime [expr]
+  `(let [start# (System/nanoTime)
+         ret# ~expr
+         duration# (/ (- (System/nanoTime) start#) 1000000.0)]
+     [ret# duration#]))
+
+(defn prime-runtimes-between [low high]
+  (loop [n (filter odd? (range low high))
+         accum []]
+    (if-let [k (first n)]
+      (let [[p t] (runtime (prime? k))]
+        (if p
+          (recur (rest n) (conj accum t))
+          (recur (rest n) accum)))
+      accum)))
+
+(defn median [coll]
+  (let [coll (sort coll)]
+    (nth coll (quot (count coll) 2))))
