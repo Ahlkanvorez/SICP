@@ -703,23 +703,26 @@
   (is (= 7 (ch1/smallest-divisor 19999))))
 
 (deftest ex22-test
+  ;; These results suggest prime? runtime is proportional to O(sqrt n),
+  ;; and that the runtime in general is proportional to the number of
+  ;; computational steps.
   (is
    (<= (Math/abs
         (- (/ (ch1/median (ch1/prime-runtimes-between 999990 1000010))
               (ch1/median (ch1/prime-runtimes-between  99990  100010)))
            (Math/sqrt 10)))
-       10))
+       4))
 
   (is
    (<= (Math/abs
         (- (/ (ch1/median (ch1/prime-runtimes-between 99990 100010))
               (ch1/median (ch1/prime-runtimes-between  9990  10010)))
            (Math/sqrt 10)))
-       10))
+       8))
 
   (is
    (<= (Math/abs
         (- (/ (ch1/median (ch1/prime-runtimes-between 9990 10010))
               (ch1/median (ch1/prime-runtimes-between  990  1010)))
            (Math/sqrt 10)))
-       10)))
+       16)))
