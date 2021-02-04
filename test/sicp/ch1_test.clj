@@ -693,5 +693,11 @@
                             (mod 206 40))
                        (mod (mod 206 40)
                             (mod 40
-                                 (mod 206 40)))))))
-  )
+                                 (mod 206 40))))))))
+
+(deftest ex21-test
+  (is (= 199 (ch1/smallest-divisor 199)))
+
+  (is (= 1999 (ch1/smallest-divisor 1999)))
+
+  (is (= 7 (ch1/smallest-divisor 19999))))

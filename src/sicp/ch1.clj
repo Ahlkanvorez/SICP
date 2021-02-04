@@ -331,3 +331,29 @@
   (if (zero? b)
     a
     (recur b (mod a b))))
+
+(defn divides? [k n]
+  (zero? (mod n k)))
+
+(defn smallest-divisor [n]
+  (loop [divisor 2]
+    (cond (< n (square divisor)) n
+          (divides? divisor n) divisor
+          :else (recur (inc divisor)))))
+
+(defn prime? [n]
+  (= n (smallest-divisor n)))
+
+(defn exp-mod [base exp m]
+  (cond (zero? exp) 1
+        (even? exp) (mod (square (exp-mod base (quot exp 2) m)) m)
+        :else (mod (* base (exp-mod base (dec exp) m)) m)))
+
+(defn fermat-test [n]
+  (let [a (inc (rand-int (dec n)))]
+    (= a (exp-mod a n n))))
+
+(defn fast-prime? [n times]
+  (cond (zero? times) true
+        (fermat-test n) (recur n (dec times))
+        :else false))
