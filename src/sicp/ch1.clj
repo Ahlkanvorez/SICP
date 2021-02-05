@@ -377,3 +377,19 @@
 (defn median [coll]
   (let [coll (sort coll)]
     (nth coll (quot (count coll) 2))))
+
+(defn smallest-divisor-2 [n]
+  (if (divides? 2 n)
+    2
+    (loop [divisor 3]
+      (cond (< n (square divisor)) n
+            (divides? divisor n) divisor
+            :else (recur (+ 2 divisor))))))
+
+(defn prime-2? [n]
+  (= n (smallest-divisor-2 n)))
+
+(defn profile [thunk times]
+  (->> (range times)
+       (map (fn [_] (second (runtime (thunk)))))
+       median))
