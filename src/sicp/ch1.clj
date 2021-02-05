@@ -384,7 +384,7 @@
     (loop [divisor 3]
       (cond (< n (square divisor)) n
             (divides? divisor n) divisor
-            :else (recur (+ 2 divisor))))))
+            :else (recur (unchecked-add-int 2 divisor))))))
 
 (defn prime-2? [n]
   (= n (smallest-divisor-2 n)))
