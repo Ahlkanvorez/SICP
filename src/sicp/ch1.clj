@@ -377,10 +377,6 @@
 (defn prime-runtimes-between [low high]
   (runtimes-between prime? low high))
 
-(defn median [coll]
-  (let [coll (sort coll)]
-    (nth coll (quot (count coll) 2))))
-
 (defn smallest-divisor-2 [n]
   (if (divides? 2 n)
     2
@@ -395,7 +391,7 @@
 (defn profile [thunk times]
   (->> (range times)
        (map (fn [_] (second (runtime (thunk)))))
-       median))
+       (apply min)))
 
 (defn fast-prime-runtimes-between [low high]
   (runtimes-between #(fast-prime? % 5) low high))

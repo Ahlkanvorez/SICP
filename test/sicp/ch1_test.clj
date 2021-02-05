@@ -708,30 +708,26 @@
   ;; computational steps.
   (is
    (<= (Math/abs
-        (- (/ (ch1/median (ch1/prime-runtimes-between 999990 1000010))
-              (ch1/median (ch1/prime-runtimes-between  99990  100010)))
+        (- (/ (apply min (ch1/prime-runtimes-between 999990 1000010))
+              (apply min (ch1/prime-runtimes-between  99990  100010)))
            (Math/sqrt 10)))
        4))
 
   (is
    (<= (Math/abs
-        (- (/ (ch1/median (ch1/prime-runtimes-between 99990 100010))
-              (ch1/median (ch1/prime-runtimes-between  9990  10010)))
+        (- (/ (apply min (ch1/prime-runtimes-between 99990 100010))
+              (apply min (ch1/prime-runtimes-between  9990  10010)))
            (Math/sqrt 10)))
        8))
 
   (is
    (<= (Math/abs
-        (- (/ (ch1/median (ch1/prime-runtimes-between 9990 10010))
-              (ch1/median (ch1/prime-runtimes-between  990  1010)))
+        (- (/ (apply min (ch1/prime-runtimes-between 9990 10010))
+              (apply min (ch1/prime-runtimes-between  990  1010)))
            (Math/sqrt 10)))
        16)))
 
 (deftest ex23-test
-  (dotimes [n 10000]
-    (ch1/prime-2? 199)
-    (ch1/prime? 199))
-
   ;; The tests I ran showed speedups by factors ranging from 0.6 to
   ;; 0.8. However, repeated tests resulted in identical runtimes -- I
   ;; assume the JIT compiler optimized the checks similarly.
@@ -751,21 +747,21 @@
   ;; The results suggest fast-prime? runtime is proportional to O(lg n)
   (is
    (<= (Math/abs
-        (- (/ (ch1/median (ch1/fast-prime-runtimes-between 999990 1000010))
-              (ch1/median (ch1/fast-prime-runtimes-between  99990  100010)))
+        (- (/ (apply min (ch1/fast-prime-runtimes-between 999990 1000010))
+              (apply min (ch1/fast-prime-runtimes-between  99990  100010)))
            (Math/log 10)))
        4))
 
   (is
    (<= (Math/abs
-        (- (/ (ch1/median (ch1/fast-prime-runtimes-between 99990 100010))
-              (ch1/median (ch1/fast-prime-runtimes-between  9990  10010)))
+        (- (/ (apply min (ch1/fast-prime-runtimes-between 99990 100010))
+              (apply min (ch1/fast-prime-runtimes-between  9990  10010)))
            (Math/log 10)))
        4))
 
   (is
    (<= (Math/abs
-        (- (/ (ch1/median (ch1/fast-prime-runtimes-between 9990 10010))
-              (ch1/median (ch1/fast-prime-runtimes-between  990  1010)))
+        (- (/ (apply min (ch1/fast-prime-runtimes-between 9990 10010))
+              (apply min (ch1/fast-prime-runtimes-between  990  1010)))
            (Math/log 10)))
        4)))
