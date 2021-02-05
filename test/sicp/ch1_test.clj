@@ -728,9 +728,10 @@
        16)))
 
 (deftest ex23-test
-  (dotimes [n 1000]
+  (dotimes [n 10000]
     (ch1/prime-2? 199)
     (ch1/prime? 199))
+
   ;; The tests I ran showed speedups by factors ranging from 0.6 to
   ;; 0.8. However, repeated tests resulted in identical runtimes -- I
   ;; assume the JIT compiler optimized the checks similarly.
