@@ -745,3 +745,26 @@
   (is (<= (/ (ch1/profile (partial ch1/prime-2? 19999) 10000)
              (ch1/profile (partial ch1/prime? 19999) 10000))
           1)))
+
+(deftest ex24-test
+  ;; The results suggest fast-prime? runtime is proportional to O(lg n)
+  (is
+   (<= (Math/abs
+        (- (/ (ch1/median (ch1/fast-prime-runtimes-between 999990 1000010))
+              (ch1/median (ch1/fast-prime-runtimes-between  99990  100010)))
+           (Math/log 10)))
+       4))
+
+  (is
+   (<= (Math/abs
+        (- (/ (ch1/median (ch1/fast-prime-runtimes-between 99990 100010))
+              (ch1/median (ch1/fast-prime-runtimes-between  9990  10010)))
+           (Math/log 10)))
+       4))
+
+  (is
+   (<= (Math/abs
+        (- (/ (ch1/median (ch1/fast-prime-runtimes-between 9990 10010))
+              (ch1/median (ch1/fast-prime-runtimes-between  990  1010)))
+           (Math/log 10)))
+       4)))

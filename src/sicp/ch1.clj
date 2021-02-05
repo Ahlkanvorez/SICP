@@ -364,15 +364,18 @@
          duration# (/ (- (System/nanoTime) start#) 1000000.0)]
      [ret# duration#]))
 
-(defn prime-runtimes-between [low high]
+(defn runtimes-between [f low high]
   (loop [n (filter odd? (range low high))
          accum []]
     (if-let [k (first n)]
-      (let [[p t] (runtime (prime? k))]
+      (let [[p t] (runtime (f k))]
         (if p
           (recur (rest n) (conj accum t))
           (recur (rest n) accum)))
       accum)))
+
+(defn prime-runtimes-between [low high]
+  (runtimes-between prime? low high))
 
 (defn median [coll]
   (let [coll (sort coll)]
@@ -393,3 +396,7 @@
   (->> (range times)
        (map (fn [_] (second (runtime (thunk)))))
        median))
+
+(defn fast-prime-runtimes-between [low high]
+  (runtimes-between #(fast-prime? % 5) low high))
+
