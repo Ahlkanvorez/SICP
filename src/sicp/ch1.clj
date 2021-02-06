@@ -399,3 +399,11 @@
 
 (defn bad-expmod [b e m]
   (mod (fast-expt b e) m))
+
+(defn linear-expmod [b e m]
+  (cond (zero? e) 1
+        (even? e) (mod (* (linear-expmod b (quot e 2) m)
+                          (linear-expmod b (quot e 2) m))
+                       m)
+        :else (mod (* b (linear-expmod b (dec e) m))
+                   m)))

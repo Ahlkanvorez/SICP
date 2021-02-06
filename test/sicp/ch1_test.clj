@@ -781,3 +781,24 @@
       (is (= (.getMessage e) "integer overflow"))))
 
   (is (= 0 (ch1/exp-mod 200 200 200))))
+
+(deftest ex26-test
+  (let [N 25
+        runtimes (eduction (map #(ch1/fast-expt 2 %))
+                           (map #(ch1/runtime (ch1/linear-expmod 2 % 7)))
+                           (map second)
+                           (range N))
+        slopes (eduction (map #(/ (second %) (first %)))
+                         (partition 2 runtimes))
+        average-slope (Math/round (/ (reduce + 0 slopes)
+                                     (/ N 2)))
+        order-of-growth (inc (int (Math/floor (Math/log average-slope))))]
+    ;; The order of growth has exponent 1, i.e. O(N); when the input
+    ;; size doubles, the runtime also doubles. This is because, while
+    ;; the (quot e 2) clause in linear-expmod does logarithmically
+    ;; reduce the number of cases to run, that case is run twice since
+    ;; it's called twice in the manual * clause (instead of once, were
+    ;; the square function used). So, while there are O(log N) steps,
+    ;; each step has the pattern for 2^N calls to linear-expmod,
+    ;; resulting in O(2^(lg N)) = O(N) calls.
+    (is (= 1 order-of-growth))))
