@@ -449,10 +449,17 @@
         (miller-rabin-test n) (recur n (dec t))
         :else false))
 
-(defn sum [term a next b]
+(defn sum-recursive [term a next b]
   (if (> a b)
     0
-    (+ (term a) (sum term (next a) next b))))
+    (+ (term a) (sum-recursive term (next a) next b))))
+
+(defn sum [term a next b]
+  (loop [r 0
+         a a]
+    (if (> a b)
+      r
+      (recur (+ (term a) r) (next a)))))
 
 (defn sum-cubes [a b]
   (sum cube a inc b))

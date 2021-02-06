@@ -816,3 +816,7 @@
 
   (is (<= (Math/abs (- (ch1/simpsons-rule ch1/cube 0 1 1000) 0.25))
           (Math/abs (- (ch1/integral ch1/cube 0 1 0.001) 0.25)))))
+
+(deftest ex30-test
+  (is (= (ch1/sum-cubes 1 10)
+         (ch1/sum-recursive ch1/cube 1 inc 10))))
