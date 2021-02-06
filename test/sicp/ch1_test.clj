@@ -727,23 +727,26 @@
            (Math/sqrt 10)))
        16)))
 
-(deftest ex23-test
-  ;; The tests I ran showed speedups by factors ranging from 0.6 to
-  ;; 0.8. However, repeated tests resulted in identical runtimes -- I
-  ;; assume the JIT compiler optimized the checks similarly.
-  ;; The runtimes are oddly variable, with either version occasionally
-  ;; taking 4-8x longer than the other.
-  (is (<= (/ (ch1/profile (fn [] (ch1/prime-2? 199)) 100000)
-             (ch1/profile (fn [] (ch1/prime? 199)) 100000))
-          1))
+(comment
+  (deftest ex23-test
+    ;; The tests I ran showed speedups by factors ranging from 0.6 to
+    ;; 0.8. However, repeated tests resulted in identical runtimes -- I
+    ;; assume the JIT compiler optimized the checks similarly.
+    ;; The runtimes are oddly variable, with either version occasionally
+    ;; taking 4-8x longer than the other. This can cause the test to
+    ;; fail randomly, so it's not really a good test. Because of that,
+    ;; I've commented out the block.
+    (is (<= (/ (ch1/profile (fn [] (ch1/prime-2? 199)) 100000)
+               (ch1/profile (fn [] (ch1/prime? 199)) 100000))
+            1))
 
-  (is (<= (/ (ch1/profile (fn [] (ch1/prime-2? 1999)) 100000)
-             (ch1/profile (fn [] (ch1/prime? 1999)) 100000))
-          1))
+    (is (<= (/ (ch1/profile (fn [] (ch1/prime-2? 1999)) 100000)
+               (ch1/profile (fn [] (ch1/prime? 1999)) 100000))
+            1))
 
-  (is (<= (/ (ch1/profile (fn [] (ch1/prime-2? 19999)) 100000)
-             (ch1/profile (fn [] (ch1/prime? 19999)) 100000))
-          1)))
+    (is (<= (/ (ch1/profile (fn [] (ch1/prime-2? 19999)) 100000)
+               (ch1/profile (fn [] (ch1/prime? 19999)) 100000))
+            1))))
 
 (deftest ex24-test
   ;; The results suggest fast-prime? runtime is proportional to O(lg n)
