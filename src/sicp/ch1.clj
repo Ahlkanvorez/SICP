@@ -407,3 +407,18 @@
                        m)
         :else (mod (* b (linear-expmod b (dec e) m))
                    m)))
+
+(defn average-slope-order [f N]
+  (let [runtimes (eduction (map #(fast-expt 2 %))
+                           (map #(runtime (f %)))
+                           (map second)
+                           (range N))
+        slopes (eduction (map #(/ (second %) (first %)))
+                         (partition 2 runtimes))
+        average-slope (Math/round (/ (reduce + 0 slopes)
+                                     (/ N 2)))]
+    (inc (int (Math/floor (Math/log average-slope))))))
+
+(defn mod-prime? [n]
+  (every? (fn [a] (= a (exp-mod a n n)))
+          (range 2 n)))
