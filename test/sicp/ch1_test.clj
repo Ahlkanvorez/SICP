@@ -859,5 +859,11 @@
            (transduce (comp (filter ch1/prime?)
                             (map ch1/square))
                       + 0
-                      (range N))))))
+                      (range (inc N)))))))
 
+(deftest ex33-b-test
+  (let [N 20]
+    (is (= (ch1/product-relatively-prime-ints N)
+           (transduce (filter (partial ch1/relatively-prime? N))
+                      * 1
+                      (range 1 (inc N)))))))

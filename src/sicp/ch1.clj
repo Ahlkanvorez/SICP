@@ -540,3 +540,11 @@
 
 (defn sum-prime-squares [a b]
   (filtered-accumulate prime? + 0 square a inc b))
+
+(defn relatively-prime? [n k]
+  (= 1 (gcd n k)))
+
+(defn product-relatively-prime-ints [n]
+  (filtered-accumulate (partial relatively-prime? n)
+                       * 1
+                       identity 1 inc n))
