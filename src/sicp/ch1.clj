@@ -449,3 +449,33 @@
         (miller-rabin-test n) (recur n (dec t))
         :else false))
 
+(defn sum [term a next b]
+  (if (> a b)
+    0
+    (+ (term a) (sum term (next a) next b))))
+
+(defn sum-cubes [a b]
+  (sum cube a inc b))
+
+(defn sum-integers [a b]
+  (sum identity a inc b))
+
+(defn pi-sum [a b]
+  (letfn [(pi-term [x] (/ 1.0 (* x (+ x 2))))
+          (pi-next [x] (+ x 4))]
+    (sum pi-term a pi-next b)))
+
+(defn integral [f a b dx]
+  (letfn [(add-dx [x] (+ x dx))]
+    (* (sum f (+ a (/ dx 2.0)) add-dx b)
+       dx)))
+
+(defn simpsons-rule [f a b n]
+  (let [h (/ (- b a) n)]
+    (letfn [(y [k] (f (+ a (* k h))))
+            (coeff [k] (cond (or (zero? k) (= k n)) 1
+                             (odd? k) 4
+                             :else 2))
+            (term [k] (* (coeff k) (y k)))]
+      (/ (* h (sum term 0 inc n))
+         3))))

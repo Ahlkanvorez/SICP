@@ -809,3 +809,10 @@
   (let [data (range 2 100)]
     (is (= (map ch1/prime? data)
            (map #(ch1/miller-rabin-prime? % 7) data)))))
+
+(deftest ex29-test
+  (is (<= (Math/abs (- (ch1/simpsons-rule ch1/cube 0 1 100) 0.25))
+          (Math/abs (- (ch1/integral ch1/cube 0 1 0.01) 0.25))))
+
+  (is (<= (Math/abs (- (ch1/simpsons-rule ch1/cube 0 1 1000) 0.25))
+          (Math/abs (- (ch1/integral ch1/cube 0 1 0.001) 0.25)))))
