@@ -852,3 +852,12 @@
 
   (is (= (ch1/accumulate * 1 identity 1 inc 10)
          (ch1/accumulate-recursive * 1 identity 1 inc 10))))
+
+(deftest ex33-a-test
+  (let [N 100]
+    (is (= (ch1/sum-prime-squares 1 N)
+           (transduce (comp (filter ch1/prime?)
+                            (map ch1/square))
+                      + 0
+                      (range N))))))
+

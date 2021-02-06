@@ -530,3 +530,13 @@
 
 (defn accumulate-product [term a next b]
   (accumulate * 1 term a next b))
+
+(defn filtered-accumulate [filter combiner null term a next b]
+  (loop [r null
+         a a]
+    (cond (> a b) r
+          (filter a) (recur (combiner (term a) r) (next a))
+          :else (recur r (next a)))))
+
+(defn sum-prime-squares [a b]
+  (filtered-accumulate prime? + 0 square a inc b))
