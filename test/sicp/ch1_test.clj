@@ -820,3 +820,18 @@
 (deftest ex30-test
   (is (= (ch1/sum-cubes 1 10)
          (ch1/sum-recursive ch1/cube 1 inc 10))))
+
+(deftest ex31-a-test
+  (letfn [(error [n] (Math/abs (- (ch1/approximate-pi n) Math/PI)))]
+    (is (< (error 1024)
+           (error 512)
+           (error 256)
+           (error 128)
+           (error 64)
+           (error 32)
+           (error 16)
+           (error 8)))))
+
+(deftest ex31-b-test
+  (is (= (ch1/factorial 10)
+         (ch1/product-recursive identity 1 inc 10))))

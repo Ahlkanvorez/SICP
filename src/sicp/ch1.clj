@@ -486,3 +486,28 @@
             (term [k] (* (coeff k) (y k)))]
       (/ (* h (sum term 0 inc n))
          3))))
+
+(defn product [f a next b]
+  (loop [r 1
+         a a]
+    (if (> a b)
+      r
+      (recur (* (f a) r) (next a)))))
+
+(defn product-recursive [f a next b]
+  (if (> a b)
+    1
+    (* (f a) (product-recursive f (next a) next b))))
+
+(defn factorial [n]
+  (product identity 1 inc n))
+
+(defn duplicated-odds [k]
+  (inc (* 2 (quot k 2))))
+
+(def duplicated-evens (comp inc duplicated-odds))
+
+(defn approximate-pi [n]
+  (letfn [(term [k] (/ (duplicated-evens k)
+                       (duplicated-odds (inc k))))]
+    (* 4 (product term 1 inc n))))
