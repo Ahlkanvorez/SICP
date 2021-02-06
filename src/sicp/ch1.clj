@@ -364,13 +364,19 @@
          duration# (/ (- (System/nanoTime) start#) 1000000.0)]
      [ret# duration#]))
 
+(defn profile [thunk times]
+  (transduce (comp (map (fn [_] (second (runtime (thunk)))))
+                   (remove zero?))
+             min ##Inf
+             (range times)))
+
 (defn runtimes-between [f low high]
   (loop [n (filter odd? (range low high))
          accum []]
     (if-let [k (first n)]
       (let [[p t] (runtime (f k))]
         (if p
-          (recur (rest n) (conj accum t))
+          (recur (rest n) (conj accum (profile (fn [] (f k)) 100)))
           (recur (rest n) accum)))
       accum)))
 
@@ -388,11 +394,8 @@
 (defn prime-2? [n]
   (= n (smallest-divisor-2 n)))
 
-(defn profile [thunk times]
-  (->> (range times)
-       (map (fn [_] (second (runtime (thunk)))))
-       (apply min)))
-
 (defn fast-prime-runtimes-between [low high]
   (runtimes-between #(fast-prime? % 5) low high))
 
+(defn bad-expmod [b e m]
+  (mod (fast-expt b e) m))

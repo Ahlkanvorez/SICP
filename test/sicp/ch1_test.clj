@@ -731,16 +731,18 @@
   ;; The tests I ran showed speedups by factors ranging from 0.6 to
   ;; 0.8. However, repeated tests resulted in identical runtimes -- I
   ;; assume the JIT compiler optimized the checks similarly.
-  (is (<= (/ (ch1/profile (partial ch1/prime-2? 199) 10000)
-             (ch1/profile (partial ch1/prime? 199) 10000))
+  ;; The runtimes are oddly variable, with either version occasionally
+  ;; taking 4-8x longer than the other.
+  (is (<= (/ (ch1/profile (fn [] (ch1/prime-2? 199)) 100000)
+             (ch1/profile (fn [] (ch1/prime? 199)) 100000))
           1))
 
-  (is (<= (/ (ch1/profile (partial ch1/prime-2? 1999) 10000)
-             (ch1/profile (partial ch1/prime? 1999) 10000))
+  (is (<= (/ (ch1/profile (fn [] (ch1/prime-2? 1999)) 100000)
+             (ch1/profile (fn [] (ch1/prime? 1999)) 100000))
           1))
 
-  (is (<= (/ (ch1/profile (partial ch1/prime-2? 19999) 10000)
-             (ch1/profile (partial ch1/prime? 19999) 10000))
+  (is (<= (/ (ch1/profile (fn [] (ch1/prime-2? 19999)) 100000)
+             (ch1/profile (fn [] (ch1/prime? 19999)) 100000))
           1)))
 
 (deftest ex24-test
@@ -765,3 +767,17 @@
               (apply min (ch1/fast-prime-runtimes-between  990  1010)))
            (Math/log 10)))
        4)))
+
+(deftest ex25-test
+  ;; The naive method of computing b^e then taking that modulo m will
+  ;; result in extremely large integers, overflowing the primitive
+  ;; types. While this is not an issue when the numbers are already
+  ;; larger than the primitive types, it does mean computations will
+  ;; be significantly slower since even ones that can be done with
+  ;; only primitives must be promoted to a bigint type.
+  (try
+    (ch1/bad-expmod 200 200 200)
+    (catch ArithmeticException e
+      (is (= (.getMessage e) "integer overflow"))))
+
+  (is (= 0 (ch1/exp-mod 200 200 200))))
