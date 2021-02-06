@@ -867,3 +867,16 @@
            (transduce (filter (partial ch1/relatively-prime? N))
                       * 1
                       (range 1 (inc N)))))))
+
+(deftest ex34-test
+  (letfn [(f [g] (g 2))]
+    (is (= 4 (f ch1/square)))
+
+    (is (= 6 (f (fn [z] (* z (inc z))))))
+
+    ;; (f f) = (f 2) = (2 2); 2 is not an IFn, so a ClassCastException
+    ;; is thrown.
+    (try (f f)
+         (catch Throwable e
+           (is (= java.lang.ClassCastException (class e)))))))
+
