@@ -415,10 +415,37 @@
                            (range N))
         slopes (eduction (map #(/ (second %) (first %)))
                          (partition 2 runtimes))
-        average-slope (Math/round (/ (reduce + 0 slopes)
-                                     (/ N 2)))]
+        average-slope (/ (reduce + 0 slopes)
+                         (/ N 2))]
     (inc (int (Math/floor (Math/log average-slope))))))
 
 (defn mod-prime? [n]
   (every? (fn [a] (= a (exp-mod a n n)))
           (range 2 n)))
+
+(defn nontrivial-modulo-root? [n m]
+  (and (not= n 1) (not= n (dec m))
+       (= 1 (mod (square n) m))))
+
+(defn miller-rabin-exp-mod
+  "(exp-mod b e m), or 0 if a nontrivial root of 1 modulo m is found."
+  [b e m]
+  (cond (zero? e) 1
+        (even? e)
+        (let [n (miller-rabin-exp-mod b (quot e 2) m)]
+          (if (nontrivial-modulo-root? n m)
+            0
+            (mod (square n) m)))
+        :else (mod (* b (miller-rabin-exp-mod b (dec e) m))
+                   m)))
+
+(defn miller-rabin-test [n]
+  (let [a (inc (rand-int (dec n)))
+        m (miller-rabin-exp-mod a (dec n) n)]
+    (and (pos? a) (= 1 m))))
+
+(defn miller-rabin-prime? [n t]
+  (cond (zero? t) (> n 1)
+        (miller-rabin-test n) (recur n (dec t))
+        :else false))
+

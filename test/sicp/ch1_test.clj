@@ -794,9 +794,18 @@
     ;; resulting in O(2^(lg N)) = O(N) calls.
     (is (= 1 order))))
 
+(def carmichael-numbers [561 1105 1729 2465 2821 6601])
+
 (deftest ex27-test
-  (doseq [carmichael [561 1105 1729 2465 2821 6601]]
+  (doseq [carmichael carmichael-numbers]
     (is (ch1/fast-prime? carmichael 5))
 
     (is (ch1/mod-prime? carmichael))))
 
+(deftest ex28-test
+  (doseq [carmichael carmichael-numbers]
+    (is (not (ch1/miller-rabin-prime? carmichael 5))))
+
+  (let [data (range 2 100)]
+    (is (= (map ch1/prime? data)
+           (map #(ch1/miller-rabin-prime? % 7) data)))))
