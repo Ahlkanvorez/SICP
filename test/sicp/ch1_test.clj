@@ -838,3 +838,17 @@
 (deftest ex31-b-test
   (is (= (ch1/factorial 10)
          (ch1/product-recursive identity 1 inc 10))))
+
+(deftest ex32-a-test
+  (is (= (ch1/sum-cubes 1 10)
+         (ch1/accumulate-sum ch1/cube 1 inc 10)))
+
+  (is (= (ch1/factorial 10)
+         (ch1/accumulate-product identity 1 inc 10))))
+
+(deftest ex32-b-test
+  (is (= (ch1/accumulate + 0 ch1/cube 1 inc 10)
+         (ch1/accumulate-recursive + 0 ch1/cube 1 inc 10)))
+
+  (is (= (ch1/accumulate * 1 identity 1 inc 10)
+         (ch1/accumulate-recursive * 1 identity 1 inc 10))))

@@ -511,3 +511,22 @@
   (letfn [(term [k] (/ (duplicated-evens k)
                        (duplicated-odds (inc k))))]
     (* 4 (product term 1 inc n))))
+
+(defn accumulate [combiner null term a next b]
+  (loop [r null
+         a a]
+    (if (> a b)
+      r
+      (recur (combiner (term a) r) (next a)))))
+
+(defn accumulate-recursive [combiner null term a next b]
+  (if (> a b)
+    null
+    (combiner (term a)
+              (accumulate-recursive combiner null term (next a) next b))))
+
+(defn accumulate-sum [term a next b]
+  (accumulate + 0 term a next b))
+
+(defn accumulate-product [term a next b]
+  (accumulate * 1 term a next b))
