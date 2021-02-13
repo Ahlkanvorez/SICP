@@ -548,3 +548,47 @@
   (filtered-accumulate (partial relatively-prime? n)
                        * 1
                        identity 1 inc n))
+
+(defn close-enough? [a b]
+  (< (abs (- a b)) 0.001))
+
+(defn search [f neg-point pos-point]
+  (let [midpoint (average neg-point pos-point)]
+    (if (close-enough? neg-point pos-point)
+      midpoint
+      (let [test-value (f midpoint)]
+        (cond (pos? test-value) (search f neg-point midpoint)
+              (neg? test-value) (search f midpoint pos-point)
+              :else midpoint)))))
+
+(defn half-interval-method [f a b]
+  (let [a-value (f a)
+        b-value (f b)]
+    (cond (and (neg? a-value) (pos? b-value)) (search f a b)
+          (and (pos? a-value) (neg? b-value)) (search f b a)
+          :else (throw (ex-info "Values have the same sign" {:a a :b b})))))
+
+(def tolerance 0.000001)
+
+(defn fixed-point [f first-guess]
+  (letfn [(close-enough? [a b] (< (abs (- a b)) tolerance))]
+    (loop [guess first-guess]
+      (let [next (f guess)]
+        (if (close-enough? guess next)
+          next
+          (recur next))))))
+
+(defn sqrt-as-fixed-point [x]
+  (fixed-point (fn [y] (average y (/ x y)))
+               1.0))
+
+(def phi
+  "The mathematical constant φ, defined by φ^2 = φ + 1.
+
+  To understand the calculation below, note that
+     φ^2 = φ + 1
+  is equivalent to
+     φ = 1 + 1/φ
+  thus, φ is a fixed point of the function f(x) = 1 + 1/x."
+  (fixed-point (fn [x] (inc (/ 1 x))) 1.0))
+

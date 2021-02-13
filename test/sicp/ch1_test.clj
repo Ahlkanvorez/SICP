@@ -880,3 +880,5 @@
          (catch Throwable e
            (is (= java.lang.ClassCastException (class e)))))))
 
+(deftest ex35-test
+  (is (ch1/close-enough? ch1/phi (/ (inc (Math/sqrt 5)) 2))))
