@@ -1,4 +1,5 @@
-(ns sicp.ch1)
+(ns sicp.ch1
+  (:require [clojure.string :as str]))
 
 (defn square [x] (* x x))
 
@@ -592,3 +593,14 @@
   thus, φ is a fixed point of the function f(x) = 1 + 1/x."
   (fixed-point (fn [x] (inc (/ 1 x))) 1.0))
 
+(defn fixed-point-showing-work [f first-guess]
+  (fixed-point (fn [x]
+                 (let [v (f x)]
+                   (printf "f(%.10f) = %.10f%n" (double x) (double v))
+                   v))
+               first-guess))
+
+(defn number-of-steps-for-fixed-point [f first-guess]
+  (-> (with-out-str (fixed-point-showing-work f first-guess))
+      (str/split #"\n")
+      count))
