@@ -604,3 +604,31 @@
   (-> (with-out-str (fixed-point-showing-work f first-guess))
       (str/split #"\n")
       count))
+
+(defn cont-frac [n d k]
+  (loop [k k
+         v 0]
+    (if (zero? k)
+      v
+      (recur (dec k) (/ (n k)
+                        (+ (d k) v))))))
+
+(defn cont-frac-recursive [n d k]
+  (letfn [(cont-frac [i]
+            (if (> i k)
+              0
+              (/ (n i)
+                 (+ (d i) (cont-frac (inc i))))))]
+    (cont-frac 1)))
+
+(defn euler-e [k]
+  (let [n (constantly 1)
+        d (fn [i]
+            (let [i (inc i)]
+              (if (zero? (mod i 3))
+                (* 2 (quot i 3))
+                1)))]
+    (+ 2 (cont-frac n d k))))
+
+(def e (double (euler-e 20)))
+

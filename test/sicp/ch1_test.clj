@@ -931,3 +931,16 @@ f(4.5555352550) = 4.5555360021
   (is (= 9 (ch1/number-of-steps-for-fixed-point
             (fn [x] (ch1/average x (/ (Math/log 1000) (Math/log x))))
             5))))
+
+(deftest ex37-a-test
+  ;; k must be at least 10 to have 4 decimal places of accuracy.
+  (letfn [(close-enough? [a b] (< (ch1/abs (- a b)) 0.0001))]
+    (is (close-enough? (/ 1 ch1/phi)
+                       (ch1/cont-frac (constantly 1) (constantly 1) 10)))))
+
+(deftest ex37-b-test
+  (is (= (ch1/cont-frac (constantly 1) (constantly 1) 10)
+         (ch1/cont-frac-recursive (constantly 1) (constantly 1) 10))))
+
+(deftest ex38-test
+  (is (= Math/E ch1/e)))
