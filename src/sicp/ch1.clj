@@ -608,7 +608,7 @@
 (defn cont-frac [n d k]
   (loop [k k
          v 0]
-    (if (zero? k)
+    (if (neg? k)
       v
       (recur (dec k) (/ (n k)
                         (+ (d k) v))))))
@@ -619,12 +619,12 @@
               0
               (/ (n i)
                  (+ (d i) (cont-frac (inc i))))))]
-    (cont-frac 1)))
+    (cont-frac 0)))
 
 (defn euler-e [k]
   (let [n (constantly 1)
         d (fn [i]
-            (let [i (inc i)]
+            (let [i (+ 2 i)]
               (if (zero? (mod i 3))
                 (* 2 (quot i 3))
                 1)))]
@@ -632,3 +632,9 @@
 
 (def e (double (euler-e 20)))
 
+(defn tan-cf [x k]
+  (letfn [(n [i] (if (zero? i)
+                   x
+                   (- (square x))))
+          (d [i] (inc (* 2 i)))]
+    (cont-frac n d k)))

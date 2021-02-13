@@ -944,3 +944,11 @@ f(4.5555352550) = 4.5555360021
 
 (deftest ex38-test
   (is (= Math/E ch1/e)))
+
+(deftest ex39-test
+  (letfn [(close-enough? [a b] (< (ch1/abs (- a b)) 0.000000001))
+          (tan [x] (double (ch1/tan-cf x 100)))]
+    (is (close-enough? (Math/tan 0) (tan 0)))
+    (is (close-enough? (Math/tan 1) (tan 1)))
+    (is (close-enough? (Math/tan Math/PI) (tan Math/PI)))
+    (is (close-enough? (Math/tan (* Math/PI)) (tan (* 2 Math/PI))))))
