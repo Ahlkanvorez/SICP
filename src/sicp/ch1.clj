@@ -688,3 +688,9 @@
 
 (defn compose [f g] (fn [x] (f (g x))))
 
+(defn repeated [f n]
+  (loop [g f
+         n (dec n)]
+    (if (zero? n)
+      g
+      (recur (compose f g) (dec n)))))
