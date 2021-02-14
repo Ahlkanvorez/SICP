@@ -682,3 +682,6 @@
 
 (defn cubic [a b c]
   (fn [x] (+ (cube x) (* a (square x)) (* b x) c)))
+
+(defn double [f]
+  (fn [x] (f (f x))))

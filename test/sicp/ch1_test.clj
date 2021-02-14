@@ -959,3 +959,8 @@ f(4.5555352550) = 4.5555360021
   (is (ch1/close-enough? -2 (ch1/newtons-method (ch1/cubic 0 0 8) 1)))
 
   (is (ch1/close-enough? -2.1325 (ch1/newtons-method (ch1/cubic 2 3 7) 1))))
+
+(deftest ex41-test
+  (is (= 2 ((ch1/double inc) 0)))
+
+  (is (= 13 ((ch1/double inc) 11))))
