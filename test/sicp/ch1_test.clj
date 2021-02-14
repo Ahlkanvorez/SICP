@@ -951,4 +951,11 @@ f(4.5555352550) = 4.5555360021
     (is (close-enough? (Math/tan 0) (tan 0)))
     (is (close-enough? (Math/tan 1) (tan 1)))
     (is (close-enough? (Math/tan Math/PI) (tan Math/PI)))
-    (is (close-enough? (Math/tan (* Math/PI)) (tan (* 2 Math/PI))))))
+    (is (close-enough? (Math/tan (* 2 Math/PI)) (tan (* 2 Math/PI))))))
+
+(deftest ex40-test
+  (is (ch1/close-enough? 0 (ch1/newtons-method (ch1/cubic 0 0 0) 1)))
+
+  (is (ch1/close-enough? -2 (ch1/newtons-method (ch1/cubic 0 0 8) 1)))
+
+  (is (ch1/close-enough? -2.1325 (ch1/newtons-method (ch1/cubic 2 3 7) 1))))

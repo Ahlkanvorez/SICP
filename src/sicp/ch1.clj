@@ -638,3 +638,47 @@
                    (- (square x))))
           (d [i] (inc (* 2 i)))]
     (cont-frac n d k)))
+
+(defn average-damp [f]
+  (fn [x] (average x (f x))))
+
+(defn sqrt-via-average-damp [x]
+  (fixed-point (average-damp (fn [y] (/ x y)))
+               1.0))
+
+(defn cube-root [x]
+  (fixed-point (average-damp (fn [y] (/ x (square y))))
+               1.0))
+
+(def dx 0.00001)
+
+(defn deriv [g]
+  (fn [x]
+    (/ (- (g (+ x dx)) (g x))
+       dx)))
+
+(defn newton-transform [g]
+  (fn [x] (- x (/ (g x) ((deriv g) x)))))
+
+(defn newtons-method [g guess]
+  (fixed-point (newton-transform g) guess))
+
+(defn sqrt-newtons-method [x]
+  (newtons-method (fn [y] (- (square y) x))
+                  1.0))
+
+(defn fixed-point-of-transform [g transform guess]
+  (fixed-point (transform g) guess))
+
+(defn sqrt-via-fixed-point-transform-average [x]
+  (fixed-point-of-transform (fn [y] (/ y x))
+                            average-damp
+                            1.0))
+
+(defn sqrt-via-fixed-point-transform-newton [x]
+  (fixed-point-of-transform (fn [y] (- (square y) x))
+                            newton-transform
+                            1.0))
+
+(defn cubic [a b c]
+  (fn [x] (+ (cube x) (* a (square x)) (* b x) c)))
