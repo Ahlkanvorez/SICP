@@ -971,4 +971,10 @@ f(4.5555352550) = 4.5555360021
 (deftest ex43-test
   (is (= 625 ((ch1/repeated ch1/square 2) 5)))
 
-  (is (= 10 ((ch1/repeated inc 10) 0))))
+  (is (= 10 ((ch1/repeated inc 10) 0)))
+  (is (= 11 ((ch1/repeated inc 11) 0)))
+
+  (is (= 625 ((ch1/repeated-fast ch1/square 2) 5)))
+
+  (is (= 10 ((ch1/repeated-fast inc 10) 0)))
+  (is (= 11 ((ch1/repeated-fast inc 11) 0))))

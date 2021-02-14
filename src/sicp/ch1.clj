@@ -694,3 +694,13 @@
     (if (zero? n)
       g
       (recur (compose f g) (dec n)))))
+
+(defn repeated-fast
+  "Compose f with itself n times using O(log n) calls to repeated-fast"
+  [f n]
+  (loop [g f
+           f f
+           n (dec n)]
+      (cond (zero? n) g
+            (even? n) (recur g (compose f f) (quot n 2))
+            :else (recur (compose f g) f (dec n)))))
