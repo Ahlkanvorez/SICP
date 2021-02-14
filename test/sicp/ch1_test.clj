@@ -978,3 +978,12 @@ f(4.5555352550) = 4.5555360021
 
   (is (= 10 ((ch1/repeated-fast inc 10) 0)))
   (is (= 11 ((ch1/repeated-fast inc 11) 0))))
+
+(deftest ex44-test
+  (is (= 1.0 ((ch1/smooth inc) 0)))
+
+  (is (= (/ (+ (ch1/square (- 2 ch1/dx)) 4 (ch1/square (+ 2 ch1/dx))) 3)
+         ((ch1/smooth ch1/square) 2)))
+
+  (is (= ((ch1/smooth (ch1/smooth (ch1/smooth ch1/square))) 2)
+         ((ch1/n-smooth ch1/square 3) 2))))

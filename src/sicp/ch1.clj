@@ -704,3 +704,10 @@
       (cond (zero? n) g
             (even? n) (recur g (compose f f) (quot n 2))
             :else (recur (compose f g) f (dec n)))))
+
+(defn smooth [f]
+  (fn [x]
+    (/ (+ (f (- x dx)) (f x) (f (+ x dx)))
+       3)))
+
+(defn n-smooth [f n] ((repeated-fast smooth n) f))
