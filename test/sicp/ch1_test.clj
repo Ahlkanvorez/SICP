@@ -964,3 +964,6 @@ f(4.5555352550) = 4.5555360021
   (is (= 2 ((ch1/double inc) 0)))
 
   (is (= 13 ((ch1/double inc) 11))))
+
+(deftest ex42-test
+  (is (= 49 ((ch1/compose ch1/square inc) 6))))

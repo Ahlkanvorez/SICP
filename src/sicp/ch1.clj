@@ -685,3 +685,6 @@
 
 (defn double [f]
   (fn [x] (f (f x))))
+
+(defn compose [f g] (fn [x] (f (g x))))
+
