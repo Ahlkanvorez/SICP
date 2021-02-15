@@ -987,3 +987,22 @@ f(4.5555352550) = 4.5555360021
 
   (is (= ((ch1/smooth (ch1/smooth (ch1/smooth ch1/square))) 2)
          ((ch1/n-smooth ch1/square 3) 2))))
+
+(deftest ex45-test
+  (is (ch1/close-enough? 2 (ch1/nth-root 4 2)))
+
+  (is (ch1/close-enough? 2 (ch1/nth-root 8 3)))
+
+  (is (ch1/close-enough? 2 (ch1/nth-root 16 4)))
+
+  (is (ch1/close-enough? 2 (ch1/nth-root 32 5)))
+
+  (is (ch1/close-enough? 2 (ch1/nth-root 64 6)))
+
+  (is (ch1/close-enough? 2 (ch1/nth-root 128 7)))
+
+  (is (ch1/close-enough? 2 (ch1/nth-root 256 8)))
+
+  (is (ch1/close-enough? 2 (ch1/nth-root 512 9)))
+
+  (is (ch1/close-enough? 2 (ch1/nth-root 1024 10))))

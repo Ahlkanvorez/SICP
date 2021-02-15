@@ -711,3 +711,8 @@
        3)))
 
 (defn n-smooth [f n] ((repeated-fast smooth n) f))
+
+(defn nth-root [x n]
+  (fixed-point ((repeated-fast average-damp (inc (quot n 2)))
+                (fn [y] (/ x (fast-expt y (dec n)))))
+               1.0))
