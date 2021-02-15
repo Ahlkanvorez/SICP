@@ -126,3 +126,9 @@
     (is (not= (+ (ch2/width-interval a) (ch2/width-interval b))
               (ch2/width-interval
                (ch2/div-interval a b))))))
+
+(deftest ex10-test
+  (is (= "Cannot divide by interval spanning 0"
+         (try (ch2/div-interval (ch2/make-interval 3 4)
+                                (ch2/make-interval -1 1))
+              (catch Exception e (ex-message e))))))

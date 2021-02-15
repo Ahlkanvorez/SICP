@@ -185,9 +185,11 @@
                    (max p1 p2 p3 p4))))
 
 (defn div-interval [x y]
-  (mul-interval x
-                (make-interval (/ 1.0 (upper-bound y))
-                               (/ 1.0 (lower-bound y)))))
+  (if (<= (lower-bound y) 0 (upper-bound y))
+    (throw (ex-info "Cannot divide by interval spanning 0" {:x x :y y}))
+    (mul-interval x
+                  (make-interval (/ 1.0 (upper-bound y))
+                                 (/ 1.0 (lower-bound y))))))
 
 (defn width-interval [p]
   (abs (- (upper-bound p) (lower-bound p))))
