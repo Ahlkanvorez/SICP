@@ -1006,3 +1006,14 @@ f(4.5555352550) = 4.5555360021
   (is (ch1/close-enough? 2 (ch1/nth-root 512 9)))
 
   (is (ch1/close-enough? 2 (ch1/nth-root 1024 10))))
+
+(deftest ex46-test
+  (doseq [x [2 4 8 16 32 64 128 256 512]]
+    (is (ch1/close-enough? (ch1/sqrt-via-average-damp x)
+                           (ch1/sqrt-via-iterative-improve x 1.0))))
+
+  (doseq [x [2 4 8 16 32 64 128 256 512]]
+    (let [f (fn [y] (ch1/average y (/ x y)))]
+      (is (ch1/close-enough?
+           (ch1/fixed-point f 1.0)
+           (ch1/fixed-point-via-iterative-improve f 1.0))))))

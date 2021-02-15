@@ -716,3 +716,18 @@
   (fixed-point ((repeated-fast average-damp (inc (quot n 2)))
                 (fn [y] (/ x (fast-expt y (dec n)))))
                1.0))
+
+(defn iterative-improve [improve good-enough?]
+  (fn [guess]
+    (let [x (improve guess)]
+      (if (good-enough? guess x)
+        x
+        (recur x)))))
+
+(defn sqrt-via-iterative-improve [x guess]
+  ((iterative-improve (average-damp (fn [y] (/ x y)))
+                      close-enough?)
+   guess))
+
+(defn fixed-point-via-iterative-improve [f guess]
+  ((iterative-improve f close-enough?) guess))
