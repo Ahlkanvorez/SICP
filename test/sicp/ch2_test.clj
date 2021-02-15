@@ -95,3 +95,10 @@
   (is (= 3 (ch2/lower-bound (ch2/make-interval 3 5))))
 
   (is (= 5 (ch2/upper-bound (ch2/make-interval 3 5)))))
+
+(deftest ex8-test
+  (let [a (ch2/make-interval 1 3)
+        b (ch2/make-interval 2 6)]
+    (is (= -5 (ch2/lower-bound (ch2/sub-interval a b))))
+
+    (is (= 1 (ch2/upper-bound (ch2/sub-interval a b))))))

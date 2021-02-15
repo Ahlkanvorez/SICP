@@ -171,6 +171,11 @@
   (make-interval (+ (lower-bound x) (lower-bound y))
                  (+ (upper-bound x) (upper-bound y))))
 
+(defn sub-interval [x y]
+  (add-interval x
+                (make-interval (- (upper-bound y))
+                               (- (lower-bound y)))))
+
 (defn mul-interval [x y]
   (let [p1 (* (lower-bound x) (lower-bound y))
         p2 (* (lower-bound x) (upper-bound y))
