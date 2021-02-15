@@ -1,6 +1,6 @@
 (ns sicp.ch2
   (:refer-clojure :exclude [cons])
-  (:require [sicp.ch1 :refer [gcd average fast-expt-iter]]))
+  (:require [sicp.ch1 :refer [average compose fast-expt-iter gcd]]))
 
 (deftype Pair [front back]
   Object
@@ -159,3 +159,6 @@
 (def two (fn [f] (fn [x] (f (f x)))))
 (defn add-1 [n]
   (fn [f] (fn [x] (f ((n f) x)))))
+
+(defn add-church-numerals [a b]
+  (fn [f] (fn [x] (f ((a (b f)) x)))))

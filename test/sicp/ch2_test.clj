@@ -87,4 +87,6 @@
 (deftest ex6-test
   (is (= (((ch2/add-1 ch2/zero) inc) 0) ((ch2/one inc) 0)))
 
-  (is (= (((ch2/add-1 (ch2/add-1 ch2/zero)) inc) 0) ((ch2/two inc) 0))))
+  (is (= (((ch2/add-1 (ch2/add-1 ch2/zero)) inc) 0) ((ch2/two inc) 0)))
+
+  (is (= 3 (((ch2/add-church-numerals ch2/one ch2/two) inc) 0))))
