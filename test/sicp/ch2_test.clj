@@ -75,3 +75,11 @@
             (ch2/segments->rectangle
              (ch2/make-segment (ch2/make-point 0 0) (ch2/make-point 2 0))
              (ch2/make-segment (ch2/make-point 0 0) (ch2/make-point 0 2)))))))
+
+(defn cons [x y] (fn [m] (m x y)))
+(defn car [z] (z (fn [p q] p)))
+(defn cdr [z] (z (fn [p q] q)))
+
+(deftest ex4-test
+  (is (= 1 (car (cons 1 2))))
+  (is (= 2 (cdr (cons 1 2)))))
