@@ -1,6 +1,6 @@
 (ns sicp.ch2
   (:refer-clojure :exclude [cons])
-  (:require [sicp.ch1 :refer [gcd]]))
+  (:require [sicp.ch1 :refer [gcd average]]))
 
 (deftype Pair [front back]
   Object
@@ -60,4 +60,27 @@
 (defn equal-rat? [x y]
   (= (* (numer x) (denom y))
      (* (numer y) (denom x))))
+
+(def make-point cons)
+(def x-point car)
+(def y-point cdr)
+
+(defn format-point [p]
+  (str "(" (x-point p) ", " (y-point p) ")"))
+(def print-point (comp println format-point))
+
+(def make-segment cons)
+(def start-segment car)
+(def end-segment cdr)
+
+(defn format-segment [s]
+  (str "(" (format-point (start-segment s))
+       ", " (format-point (end-segment s)) ")"))
+(def print-segment (comp println format-segment))
+
+(defn midpoint-segment [line]
+  (let [start (start-segment line)
+        end (end-segment line)]
+    (make-point (average (x-point start) (x-point end))
+                (average (y-point start) (y-point end)))))
 
