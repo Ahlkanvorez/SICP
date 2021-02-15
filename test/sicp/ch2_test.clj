@@ -26,3 +26,52 @@
                    (ch2/midpoint-segment
                     (ch2/make-segment (ch2/make-point -5 0)
                                       (ch2/make-point 5 -10)))))))
+
+(deftest ex3-test
+  (is (= 4 (ch2/perimeter-rectangle
+            (ch2/make-rectangle
+             (ch2/make-point 0 0)
+             (ch2/make-point 0 1)
+             (ch2/make-point 1 1)
+             (ch2/make-point 1 0)))))
+
+  (is (= 8 (ch2/perimeter-rectangle
+            (ch2/make-rectangle
+             (ch2/make-point 0 0)
+             (ch2/make-point 0 2)
+             (ch2/make-point 2 2)
+             (ch2/make-point 2 0)))))
+
+  (is (= 1 (ch2/area-rectangle
+            (ch2/make-rectangle
+             (ch2/make-point 0 0)
+             (ch2/make-point 0 1)
+             (ch2/make-point 1 1)
+             (ch2/make-point 1 0)))))
+
+  (is (= 4 (ch2/area-rectangle
+            (ch2/make-rectangle
+             (ch2/make-point 0 0)
+             (ch2/make-point 0 2)
+             (ch2/make-point 2 2)
+             (ch2/make-point 2 0)))))
+
+  (is (= 4 (ch2/perimeter-rectangle
+            (ch2/segments->rectangle
+             (ch2/make-segment (ch2/make-point 0 0) (ch2/make-point 1 0))
+             (ch2/make-segment (ch2/make-point 0 0) (ch2/make-point 0 1))))))
+
+  (is (= 8 (ch2/perimeter-rectangle
+            (ch2/segments->rectangle
+             (ch2/make-segment (ch2/make-point 0 0) (ch2/make-point 2 0))
+             (ch2/make-segment (ch2/make-point 0 0) (ch2/make-point 0 2))))))
+
+  (is (= 1 (ch2/area-rectangle
+            (ch2/segments->rectangle
+             (ch2/make-segment (ch2/make-point 0 0) (ch2/make-point 1 0))
+             (ch2/make-segment (ch2/make-point 0 0) (ch2/make-point 0 1))))))
+
+  (is (= 4 (ch2/area-rectangle
+            (ch2/segments->rectangle
+             (ch2/make-segment (ch2/make-point 0 0) (ch2/make-point 2 0))
+             (ch2/make-segment (ch2/make-point 0 0) (ch2/make-point 0 2)))))))

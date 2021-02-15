@@ -84,3 +84,51 @@
     (make-point (average (x-point start) (x-point end))
                 (average (y-point start) (y-point end)))))
 
+(defn points->rectangle [bottom-left top-left top-right bottom-right]
+  (cons bottom-left
+        (cons top-left
+              (cons top-right
+                    bottom-right))))
+
+(defn segments->rectangle [bottom left]
+  (let [bottom-left (start-segment bottom)
+        bottom-right (end-segment bottom)
+        top-left (end-segment left)
+        top-right (make-point (x-point bottom-right) (y-point top-left))]
+    (points->rectangle bottom-left top-left top-right bottom-right)))
+
+(def make-rectangle points->rectangle)
+
+(def bottom-left-rectangle car)
+(def top-left-rectangle (comp car cdr))
+(def top-right-rectangle (comp car cdr cdr))
+(def bottom-right-rectangle (comp cdr cdr cdr))
+
+(defn top-rectangle [rect]
+  (make-segment (top-left-rectangle rect) (top-right-rectangle rect)))
+
+(defn side-rectangle [rect]
+  (make-segment (bottom-left-rectangle rect) (top-left-rectangle rect)))
+
+(defn format-rectangle [rect]
+  (str "(" (bottom-left-rectangle rect)
+       ", " (top-left-rectangle rect)
+       ", " (top-right-rectangle rect)
+       ", " (bottom-right-rectangle rect)
+       ")"))
+(def print-rectangle (comp println format-rectangle))
+
+(defn perimeter-rectangle [rect]
+  (let [bottom-left (bottom-left-rectangle rect)
+        top-left (top-left-rectangle rect)
+        top-right (top-right-rectangle rect)
+        top-length (- (x-point top-right) (x-point top-left))
+        side-length (- (y-point top-left) (y-point bottom-left))]
+    (+ (* 2 top-length) (* 2 side-length))))
+
+(defn area-rectangle [rect]
+  (let [bottom-left (bottom-left-rectangle rect)
+        top-right (top-right-rectangle rect)
+        width (- (x-point top-right) (x-point bottom-left))
+        height (- (y-point top-right) (y-point bottom-left))]
+    (* width height)))
