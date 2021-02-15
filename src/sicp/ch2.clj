@@ -1,6 +1,6 @@
 (ns sicp.ch2
   (:refer-clojure :exclude [cons])
-  (:require [sicp.ch1 :refer [gcd average]]))
+  (:require [sicp.ch1 :refer [gcd average fast-expt-iter]]))
 
 (deftype Pair [front back]
   Object
@@ -132,3 +132,24 @@
         width (- (x-point top-right) (x-point bottom-left))
         height (- (y-point top-right) (y-point bottom-left))]
     (* width height)))
+
+(defn cons-fn [x y] (fn [m] (m x y)))
+(defn car-fn [z] (z (fn [p q] p)))
+(defn cdr-fn [z] (z (fn [p q] q)))
+
+(defn cons-num [a b]
+  (* (fast-expt-iter 2 a) (fast-expt-iter 3 b)))
+
+(defn car-num [p]
+  (loop [c 0
+         p p]
+    (if (zero? (mod p 2))
+      (recur (inc c) (quot p 2))
+      c)))
+
+(defn cdr-num [p]
+  (loop [c 0
+         p p]
+    (if (zero? (mod p 3))
+      (recur (inc c) (quot p 3))
+      c)))

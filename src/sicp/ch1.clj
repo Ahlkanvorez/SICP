@@ -1,7 +1,7 @@
 (ns sicp.ch1
   (:require [clojure.string :as str]))
 
-(defn square [x] (* x x))
+(defn square [x] (*' x x))
 
 (defn sum-of-squares [a b] (+ (square a) (square b)))
 
@@ -203,7 +203,7 @@
     (if (= n 0)
       a
       (if (odd? n)
-        (recur (dec n) b (* a b))
+        (recur (dec n) b (*' a b))
         (recur (/ n 2) (square b) a)))))
 
 (defn fast-* [a b]

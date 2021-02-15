@@ -76,10 +76,10 @@
              (ch2/make-segment (ch2/make-point 0 0) (ch2/make-point 2 0))
              (ch2/make-segment (ch2/make-point 0 0) (ch2/make-point 0 2)))))))
 
-(defn cons [x y] (fn [m] (m x y)))
-(defn car [z] (z (fn [p q] p)))
-(defn cdr [z] (z (fn [p q] q)))
-
 (deftest ex4-test
-  (is (= 1 (car (cons 1 2))))
-  (is (= 2 (cdr (cons 1 2)))))
+  (is (= 1 (ch2/car-fn (ch2/cons-fn 1 2))))
+  (is (= 2 (ch2/cdr-fn (ch2/cons-fn 1 2)))))
+
+(deftest ex5-test
+  (is (= 5 (ch2/car-num (ch2/cons-num 5 6))))
+  (is (= 6 (ch2/cdr-num (ch2/cons-num 5 6)))))
