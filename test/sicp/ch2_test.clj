@@ -83,3 +83,8 @@
 (deftest ex5-test
   (is (= 5 (ch2/car-num (ch2/cons-num 5 6))))
   (is (= 6 (ch2/cdr-num (ch2/cons-num 5 6)))))
+
+(deftest ex6-test
+  (is (= (((ch2/add-1 ch2/zero) inc) 0) ((ch2/one inc) 0)))
+
+  (is (= (((ch2/add-1 (ch2/add-1 ch2/zero)) inc) 0) ((ch2/two inc) 0))))

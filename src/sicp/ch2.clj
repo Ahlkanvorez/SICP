@@ -153,3 +153,9 @@
     (if (zero? (mod p 3))
       (recur (inc c) (quot p 3))
       c)))
+
+(def zero (fn [f] (fn [x] x)))
+(def one (fn [f] (fn [x] (f x))))
+(def two (fn [f] (fn [x] (f (f x)))))
+(defn add-1 [n]
+  (fn [f] (fn [x] (f ((n f) x)))))
