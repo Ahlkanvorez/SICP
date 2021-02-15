@@ -102,3 +102,27 @@
     (is (= -5 (ch2/lower-bound (ch2/sub-interval a b))))
 
     (is (= 1 (ch2/upper-bound (ch2/sub-interval a b))))))
+
+(deftest ex9-test
+  (let [a (ch2/make-interval 1 3)
+        b (ch2/make-interval 2 4)]
+    (is (= (+ (ch2/width-interval a) (ch2/width-interval b))
+           (ch2/width-interval
+            (ch2/add-interval a b)))))
+
+  (let [a (ch2/make-interval 1 3)
+        b (ch2/make-interval 2 4)]
+    (is (= (+ (ch2/width-interval a) (ch2/width-interval b))
+           (ch2/width-interval
+            (ch2/sub-interval a b)))))
+
+  (let [a (ch2/make-interval 1 3)
+        b (ch2/make-interval 2 4)]
+    (is (not= (+ (ch2/width-interval a) (ch2/width-interval b))
+              (ch2/width-interval
+               (ch2/mul-interval a b)))))
+  (let [a (ch2/make-interval 1 3)
+        b (ch2/make-interval 2 4)]
+    (is (not= (+ (ch2/width-interval a) (ch2/width-interval b))
+              (ch2/width-interval
+               (ch2/div-interval a b))))))

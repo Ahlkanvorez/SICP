@@ -1,6 +1,6 @@
 (ns sicp.ch2
   (:refer-clojure :exclude [cons])
-  (:require [sicp.ch1 :refer [average compose fast-expt-iter gcd]]))
+  (:require [sicp.ch1 :refer [abs average compose fast-expt-iter gcd]]))
 
 (deftype Pair [front back]
   Object
@@ -188,3 +188,6 @@
   (mul-interval x
                 (make-interval (/ 1.0 (upper-bound y))
                                (/ 1.0 (lower-bound y)))))
+
+(defn width-interval [p]
+  (abs (- (upper-bound p) (lower-bound p))))
