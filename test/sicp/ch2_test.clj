@@ -251,3 +251,10 @@
   ;; cons does not reverse the list, it produces this dual hierarchy.
   (is (= (ch2/cons (ch2/cons (ch2/cons (ch2/cons (ch2/cons nil 1) 4) 9) 16) 25)
          (ch2/square-list-inside-out (ch2/list 1 2 3 4 5)))))
+
+(deftest ex23-test
+  (is (= "57\n321\n88\n"
+         (with-out-str
+           (ch2/for-each println (ch2/list 57 321 88)))))
+
+  (is (= true (ch2/for-each identity (ch2/list 57 321 88)))))
