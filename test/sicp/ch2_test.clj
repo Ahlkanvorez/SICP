@@ -169,3 +169,17 @@
         (let [x (ch2/make-center-percent 100 p)
               y (ch2/make-center-percent 100 q)]
           (is (not= (ch2/par1 x y) (ch2/par2 x y))))))))
+
+(deftest ex15-test
+    ;; Interval multiplication has a scaling effect which relates to
+    ;; rational number multiplication differently than may be expected.
+    ;; For example, while (x^2)/x = x holds for rationals, it does not
+    ;; hold for intervals; neither does x/(x^2) = 1/x. Minimizing this
+    ;; effect by minimizing the number of multiplication operations
+    ;; will produce more narrow intervals, since it minimizes the
+    ;; scaling effect, thus producing tighter error bounds.
+    (let [one (ch2/make-interval 1 1)
+        x (ch2/make-interval 1/2 2)]
+      (is (not= x (ch2/div-interval (ch2/mul-interval x x) x)))
+      (is (not= x (ch2/div-interval x (ch2/mul-interval x x)))))))
+
