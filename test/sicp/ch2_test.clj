@@ -178,8 +178,22 @@
     ;; effect by minimizing the number of multiplication operations
     ;; will produce more narrow intervals, since it minimizes the
     ;; scaling effect, thus producing tighter error bounds.
-    (let [one (ch2/make-interval 1 1)
+  (let [one (ch2/make-interval 1 1)
         x (ch2/make-interval 1/2 2)]
-      (is (not= x (ch2/div-interval (ch2/mul-interval x x) x)))
-      (is (not= x (ch2/div-interval x (ch2/mul-interval x x)))))))
+    (is (not= x (ch2/div-interval (ch2/mul-interval x x) x)))
+    (is (not= x (ch2/div-interval x (ch2/mul-interval x x))))))
 
+(deftest ex16-test
+  ;; It follows from the above observation of (x^2)/x not being x that
+  ;; interval multiplication and division are not inverse operations.
+  ;; Consequently, the algebraic properties assumed when asserting the
+  ;; equations underlying par1 and par2 are equal for intervals do not
+  ;; hold. Thus, while "equivalent" algebraic expressions may seem to
+  ;; produce different results, this is due to false algebraic
+  ;; assumptions. With interval multiplication and division defined as
+  ;; they are here, it is impossible to make these two equations equal
+  ;; in general, since doing so requires the above property holds.
+  (let [one (ch2/make-interval 1 1)
+        x (ch2/make-interval 1/2 2)]
+    (is (not= x (ch2/div-interval (ch2/mul-interval x x) x)))
+    (is (not= x (ch2/div-interval x (ch2/mul-interval x x))))))
