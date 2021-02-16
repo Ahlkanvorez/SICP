@@ -202,3 +202,9 @@
   (is (= (ch2/cons 34 nil) (ch2/last-pair (ch2/list 23 72 149 34))))
   (is (= nil (ch2/last-pair (ch2/list))))
   (is (= (ch2/cons 1 nil) (ch2/last-pair (ch2/list 1)))))
+
+(deftest ex18-test
+  (is (= (ch2/list 25 16 9 4 1) (ch2/reverse (ch2/list 1 4 9 16 25))))
+  (is (= (ch2/list) (ch2/reverse (ch2/list))))
+  (is (= (ch2/list 1) (ch2/reverse (ch2/list 1))))
+  (is (= (ch2/list 2 1) (ch2/reverse (ch2/list 1 2)))))

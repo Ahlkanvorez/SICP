@@ -271,3 +271,10 @@
   (cond (nil? coll) nil
         (nil? (cdr coll)) coll
         :else (recur (cdr coll))))
+
+(defn reverse [coll]
+  (loop [accum nil
+         coll coll]
+    (if (nil? coll)
+      accum
+      (recur (cons (car coll) accum) (cdr coll)))))
