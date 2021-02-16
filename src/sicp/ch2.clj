@@ -11,8 +11,12 @@
         (let [back (.-back p)]
           (if (instance? Pair back)
             (recur (str s " " (.-front p)) back)
-            (str s " " (.-front p) " " back ")")))
-        (str s " . " p ")"))))
+            (if (nil? back)
+              (str s " " (.-front p) ")")
+              (str s " " (.-front p) " " back ")"))))
+        (if (nil? p)
+          (str s ")")
+          (str s " . " p ")")))))
   (equals [this other]
     (and (instance? Pair other)
          (= front (.-front other))
@@ -239,3 +243,31 @@
                   (add-interval (div-interval one r1)
                                 (div-interval one r2)))))
 
+(defn list [& coll]
+  (loop [accum nil
+         coll (vec coll)]
+    (if-let [v (peek coll)]
+      (recur (cons v accum) (pop coll))
+      accum)))
+
+(defn list-ref [items n]
+  (if (zero? n)
+    (car items)
+    (recur (cdr items) (dec n))))
+
+(defn length [items]
+  (loop [coll items
+         count 0]
+    (if (nil? coll)
+      count
+      (recur (cdr coll) (inc count)))))
+
+(defn append [a b]
+  (if (nil? a)
+    b
+    (cons (car a) (append (cdr a) b))))
+
+(defn last-pair [coll]
+  (cond (nil? coll) nil
+        (nil? (cdr coll)) coll
+        :else (recur (cdr coll))))

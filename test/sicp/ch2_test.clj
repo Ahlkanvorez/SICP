@@ -197,3 +197,8 @@
         x (ch2/make-interval 1/2 2)]
     (is (not= x (ch2/div-interval (ch2/mul-interval x x) x)))
     (is (not= x (ch2/div-interval x (ch2/mul-interval x x))))))
+
+(deftest ex17-test
+  (is (= (ch2/cons 34 nil) (ch2/last-pair (ch2/list 23 72 149 34))))
+  (is (= nil (ch2/last-pair (ch2/list))))
+  (is (= (ch2/cons 1 nil) (ch2/last-pair (ch2/list 1)))))
