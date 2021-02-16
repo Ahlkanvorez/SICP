@@ -292,3 +292,15 @@
         :else (+ (cc amount (except-first-denomination coin-values))
                  (cc (- amount (first-denomination coin-values))
                      coin-values))))
+
+(defn same-parity [n & coll]
+  (let [parity (mod n 2)
+        coll (apply list coll)]
+    (loop [accum (list n)
+           coll coll]
+      (if (nil? coll)
+        (reverse accum)
+        (let [k (car coll)]
+          (if (= parity (mod k 2))
+            (recur (cons k accum) (cdr coll))
+            (recur accum (cdr coll))))))))

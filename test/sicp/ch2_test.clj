@@ -181,6 +181,7 @@
   (let [one (ch2/make-interval 1 1)
         x (ch2/make-interval 1/2 2)]
     (is (not= x (ch2/div-interval (ch2/mul-interval x x) x)))
+
     (is (not= x (ch2/div-interval x (ch2/mul-interval x x))))))
 
 (deftest ex16-test
@@ -196,6 +197,7 @@
   (let [one (ch2/make-interval 1 1)
         x (ch2/make-interval 1/2 2)]
     (is (not= x (ch2/div-interval (ch2/mul-interval x x) x)))
+
     (is (not= x (ch2/div-interval x (ch2/mul-interval x x))))))
 
 (deftest ex17-test
@@ -205,8 +207,11 @@
 
 (deftest ex18-test
   (is (= (ch2/list 25 16 9 4 1) (ch2/reverse (ch2/list 1 4 9 16 25))))
+
   (is (= (ch2/list) (ch2/reverse (ch2/list))))
+
   (is (= (ch2/list 1) (ch2/reverse (ch2/list 1))))
+
   (is (= (ch2/list 2 1) (ch2/reverse (ch2/list 1 2)))))
 
 (deftest ex19-test
@@ -215,4 +220,10 @@
   ;; with the amounts combined additively, so the combinations are not
   ;; sensitive to order.
   (is (= 4 (ch2/cc 11 ch2/us-coins)))
+
   (is (= 4 (ch2/cc 11 (ch2/reverse ch2/us-coins)))))
+
+(deftest ex20-test
+  (is (= (ch2/list 1 3 5 7) (ch2/same-parity 1 2 3 4 5 6 7)))
+
+  (is (= (ch2/list 2 4 6) (ch2/same-parity 2 3 4 5 6 7))))
