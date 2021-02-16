@@ -161,3 +161,11 @@
         (let [x (ch2/make-center-percent 100 p)
               y (ch2/make-center-percent 100 q)]
           (is (close-enough? (+ p q) (ch2/percent (ch2/mul-interval x y)))))))))
+
+(deftest ex14-test
+  (letfn [(close-enough? [a b] (< (abs (- a b)) 0.0000001))]
+    (doseq [p (range 0.0001 0.0010 0.0001)]
+      (doseq [q (range 0.0001 0.0010 0.0001)]
+        (let [x (ch2/make-center-percent 100 p)
+              y (ch2/make-center-percent 100 q)]
+          (is (not= (ch2/par1 x y) (ch2/par2 x y))))))))
