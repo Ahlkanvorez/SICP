@@ -1,5 +1,6 @@
 (ns sicp.ch2-test
   (:require [sicp.ch2 :as ch2]
+            [sicp.ch1 :refer [abs]]
             [clojure.test :refer [deftest is]]))
 
 (def one-third (ch2/make-rat 1 3))
@@ -152,3 +153,11 @@
     (is (= 105.0 (ch2/upper-bound i)))
 
     (is (= 5.0 (ch2/width i)))))
+
+(deftest ex13-test
+  (letfn [(close-enough? [a b] (< (abs (- a b)) 0.0000001))]
+    (doseq [p (range 0.0001 0.0010 0.0001)]
+      (doseq [q (range 0.0001 0.0010 0.0001)]
+        (let [x (ch2/make-center-percent 100 p)
+              y (ch2/make-center-percent 100 q)]
+          (is (close-enough? (+ p q) (ch2/percent (ch2/mul-interval x y)))))))))
