@@ -227,3 +227,11 @@
   (is (= (ch2/list 1 3 5 7) (ch2/same-parity 1 2 3 4 5 6 7)))
 
   (is (= (ch2/list 2 4 6) (ch2/same-parity 2 3 4 5 6 7))))
+
+(deftest ex21-test
+  (is (= (ch2/list 1 4 9 16 25 36 49)
+         (ch2/square-list-recursive (ch2/list 1 2 3 4 5 6 7))))
+
+  (is (= (ch2/list 1 4 9 16 25 36 49)
+         (ch2/square-list-higher-order (ch2/list 1 2 3 4 5 6 7)))))
+

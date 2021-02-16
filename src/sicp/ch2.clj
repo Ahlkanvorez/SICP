@@ -1,6 +1,8 @@
 (ns sicp.ch2
-  (:refer-clojure :exclude [cons list])
-  (:require [sicp.ch1 :refer [abs average compose fast-expt-iter gcd]]))
+  (:refer-clojure :exclude [cons list map])
+  (:require
+   [sicp.ch1
+    :refer [abs average compose fast-expt-iter gcd square]]))
 
 (deftype Pair [front back]
   Object
@@ -304,3 +306,28 @@
           (if (= parity (mod k 2))
             (recur (cons k accum) (cdr coll))
             (recur accum (cdr coll))))))))
+
+(comment
+  (defn scale-list [items factor]
+    (if (nil? items)
+      nil
+      (cons (* (car items) factor)
+            (scale-list (cdr items) factor)))))
+
+(defn map [proc items]
+  (if (nil? items)
+    nil
+    (cons (proc (car items))
+          (map proc (cdr items)))))
+
+(defn scale-list [items factor]
+  (map (fn [x] (* x factor))
+       items))
+
+(defn square-list-recursive [items]
+  (if (nil? items)
+    nil
+    (cons (square (car items)) (square-list-recursive (cdr items)))))
+
+(defn square-list-higher-order [items]
+  (map square items))
