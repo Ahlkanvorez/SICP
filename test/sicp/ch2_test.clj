@@ -208,3 +208,11 @@
   (is (= (ch2/list) (ch2/reverse (ch2/list))))
   (is (= (ch2/list 1) (ch2/reverse (ch2/list 1))))
   (is (= (ch2/list 2 1) (ch2/reverse (ch2/list 1 2)))))
+
+(deftest ex19-test
+  ;; The order of the coin list does not effect the results, because
+  ;; all combinations of coins less than or equal to amount are checked,
+  ;; with the amounts combined additively, so the combinations are not
+  ;; sensitive to order.
+  (is (= 4 (ch2/cc 11 ch2/us-coins)))
+  (is (= 4 (ch2/cc 11 (ch2/reverse ch2/us-coins)))))

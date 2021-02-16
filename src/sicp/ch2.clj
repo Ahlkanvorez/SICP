@@ -1,5 +1,5 @@
 (ns sicp.ch2
-  (:refer-clojure :exclude [cons])
+  (:refer-clojure :exclude [cons list])
   (:require [sicp.ch1 :refer [abs average compose fast-expt-iter gcd]]))
 
 (deftype Pair [front back]
@@ -278,3 +278,17 @@
     (if (nil? coll)
       accum
       (recur (cons (car coll) accum) (cdr coll)))))
+
+(def us-coins (list 50 25 10 5 1))
+(def uk-coins (list 100 50 20 10 5 2 1 0.5))
+
+(def no-more? nil?)
+(def first-denomination car)
+(def except-first-denomination cdr)
+
+(defn cc [amount coin-values]
+  (cond (zero? amount) 1
+        (or (neg? amount) (no-more? coin-values)) 0
+        :else (+ (cc amount (except-first-denomination coin-values))
+                 (cc (- amount (first-denomination coin-values))
+                     coin-values))))
