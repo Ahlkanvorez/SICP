@@ -213,3 +213,18 @@
       (and (neg? b) (neg? d)) (make-interval (* b d) (* a c))
       (and (not (neg? a)) (not (neg? c))) (make-interval (* a c) (* b d))
       :else (mul-interval x y))))
+
+(defn make-center-width [c w]
+  (make-interval (- c w) (+ c w)))
+
+(defn center [i]
+  (/ (+ (lower-bound i) (upper-bound i)) 2))
+
+(defn width [i]
+  (/ (- (upper-bound i) (lower-bound i)) 2))
+
+(defn make-center-percent [c p]
+  (make-center-width c (* p c)))
+
+(defn percent [i]
+  (/ (width i) (center i)))

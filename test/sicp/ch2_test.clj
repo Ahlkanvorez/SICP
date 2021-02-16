@@ -142,3 +142,13 @@
                 y (ch2/make-interval c d)]
             (is (= [x y (ch2/mul-interval x y)]
                    [x y (ch2/mul-interval-via-cases x y)]))))))))
+
+(deftest ex12-test
+  (let [i (ch2/make-center-percent 100 0.05)]
+    (is (= 0.05 (ch2/percent i)))
+
+    (is (= 95.0 (ch2/lower-bound i)))
+
+    (is (= 105.0 (ch2/upper-bound i)))
+
+    (is (= 5.0 (ch2/width i)))))
