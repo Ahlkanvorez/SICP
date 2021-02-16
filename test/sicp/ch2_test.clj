@@ -132,3 +132,13 @@
          (try (ch2/div-interval (ch2/make-interval 3 4)
                                 (ch2/make-interval -1 1))
               (catch Exception e (ex-message e))))))
+
+(deftest ex11-test
+  (doseq [a (range -4 5)]
+    (doseq [b (range (inc a) 5)]
+      (doseq [c (range -4 5)]
+        (doseq [d (range (inc c) 5)]
+          (let [x (ch2/make-interval a b)
+                y (ch2/make-interval c d)]
+            (is (= [x y (ch2/mul-interval x y)]
+                   [x y (ch2/mul-interval-via-cases x y)]))))))))

@@ -12,7 +12,11 @@
           (if (instance? Pair back)
             (recur (str s " " (.-front p)) back)
             (str s " " (.-front p) " " back ")")))
-        (str s " . " p ")")))))
+        (str s " . " p ")"))))
+  (equals [this other]
+    (and (instance? Pair other)
+         (= front (.-front other))
+         (= back (.-back other)))))
 
 (defmethod print-method Pair [pair writer]
   (print-simple (str pair) writer))
@@ -193,3 +197,19 @@
 
 (defn width-interval [p]
   (abs (- (upper-bound p) (lower-bound p))))
+
+(defn mul-interval-via-cases [x y]
+  (let [a (lower-bound x)
+        b (upper-bound x)
+        c (lower-bound y)
+        d (upper-bound y)]
+    (cond
+      (and (neg? b) (not (neg? c))) (make-interval (* a d) (* b c))
+      (and (neg? d) (not (neg? a))) (make-interval (* b c) (* a d))
+      (and (neg? a) (not (neg? b)) (not (neg? c))) (make-interval (* a d) (* b d))
+      (and (neg? c) (not (neg? d)) (not (neg? a))) (make-interval (* c b) (* d b))
+      (and (neg? b) (neg? c) (not (neg? d))) (make-interval (* a d) (* a c))
+      (and (neg? d) (neg? a) (not (neg? b))) (make-interval (* b c) (* a c))
+      (and (neg? b) (neg? d)) (make-interval (* b d) (* a c))
+      (and (not (neg? a)) (not (neg? c))) (make-interval (* a c) (* b d))
+      :else (mul-interval x y))))
