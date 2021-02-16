@@ -331,3 +331,21 @@
 
 (defn square-list-higher-order [items]
   (map square items))
+
+(defn square-list-backwards [items]
+  (loop [things items
+         answer nil]
+    (if (nil? things)
+      answer
+      (recur (cdr things)
+             (cons (square (car things))
+                   answer)))))
+
+(defn square-list-inside-out [items]
+  (loop [things items
+         answer nil]
+    (if (nil? things)
+      answer
+      (recur (cdr things)
+             (cons answer
+                   (square (car things)))))))

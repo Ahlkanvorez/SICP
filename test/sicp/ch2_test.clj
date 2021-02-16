@@ -235,3 +235,19 @@
   (is (= (ch2/list 1 4 9 16 25 36 49)
          (ch2/square-list-higher-order (ch2/list 1 2 3 4 5 6 7)))))
 
+(deftest ex22-test
+  ;; The last value cons'd to the answer list is the first value in the
+  ;; answer list, thus 5 is the last number to be squared, and thus the
+  ;; first number on the answer list. This property, applied recursively,
+  ;; results in a reversed answer list.
+  (is (= (ch2/list 25 16 9 4 1)
+         (ch2/square-list-backwards (ch2/list 1 2 3 4 5))))
+
+  ;; The structure returned is not a flat list, but a hierarchy of
+  ;; pairs. The hierarchy where each left cell is a value and each right
+  ;; cell is another pair or nil is called a "list", but this is not
+  ;; the same as the dual hierarchy, where each right cell is a value
+  ;; and each left cell is a pair or nil. Reversing the arguments to
+  ;; cons does not reverse the list, it produces this dual hierarchy.
+  (is (= (ch2/cons (ch2/cons (ch2/cons (ch2/cons (ch2/cons nil 1) 4) 9) 16) 25)
+         (ch2/square-list-inside-out (ch2/list 1 2 3 4 5)))))
