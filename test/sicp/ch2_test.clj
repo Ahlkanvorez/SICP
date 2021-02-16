@@ -257,4 +257,4 @@
          (with-out-str
            (ch2/for-each println (ch2/list 57 321 88)))))
 
-  (is (= true (ch2/for-each identity (ch2/list 57 321 88)))))
+  (is (= nil (ch2/for-each identity (ch2/list 57 321 88)))))

@@ -351,7 +351,6 @@
                    (square (car things)))))))
 
 (defn for-each [proc coll]
-  (if (nil? coll)
-    true
-    (do (proc (car coll))
-        (recur proc (cdr coll)))))
+  (when-not (nil? coll)
+    (proc (car coll))
+    (recur proc (cdr coll))))
