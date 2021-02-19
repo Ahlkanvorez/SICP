@@ -372,3 +372,24 @@
     (is (= 2 (ch2/branch-structure left)))
 
     (is (= 4 (ch2/branch-structure right)))))
+
+(deftest ex29b-test
+  (is (= 0 (ch2/total-weight nil)))
+
+  (is (= 3 (ch2/total-weight
+            (ch2/make-mobile
+             (ch2/make-branch 1 1)
+             (ch2/make-branch 2 2)))))
+
+  (is (= 10 (ch2/total-weight
+             (ch2/make-mobile
+              (ch2/make-branch 1 1)
+              (ch2/make-branch
+               2
+               (ch2/make-mobile
+                (ch2/make-branch
+                 3
+                 (ch2/make-mobile
+                  (ch2/make-branch 2 2)
+                  (ch2/make-branch 3 3)))
+                (ch2/make-branch 4 4))))))))

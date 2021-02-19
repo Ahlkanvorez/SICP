@@ -395,3 +395,16 @@
 
 (def branch-length car)
 (def branch-structure (compose car cdr))
+
+(defn total-weight [mobile]
+  (if (nil? mobile)
+    0
+    (let [left (branch-structure (left-branch mobile))
+          right (branch-structure (right-branch mobile))]
+      (+ (if (pair? left)
+           (total-weight left)
+           left)
+         (if (pair? right)
+           (total-weight right)
+           right)))))
+
