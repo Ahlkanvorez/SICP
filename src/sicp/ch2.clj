@@ -371,3 +371,15 @@
       (if (pair? (car coll))
         (recur (cons (deep-reverse (car coll)) accum) (cdr coll))
         (recur (cons (car coll) accum) (cdr coll))))))
+
+(defn fringe [coll]
+  (if (pair? coll)
+    (loop [accum (list)
+           coll coll]
+      (if (nil? coll)
+        (reverse accum)
+        (let [f (fringe (car coll))]
+          (if (pair? f)
+            (recur (append (reverse f) accum) (cdr coll))
+            (recur (cons f accum) (cdr coll))))))
+    coll))

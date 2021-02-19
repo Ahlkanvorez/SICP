@@ -1,6 +1,7 @@
 (ns sicp.ch2-test
   (:require [sicp.ch2 :as ch2]
             [sicp.ch1 :refer [abs]]
+            [clojure.pprint :as pp]
             [clojure.test :refer [deftest is]]))
 
 (def one-third (ch2/make-rat 1 3))
@@ -329,21 +330,29 @@
   (let [x (ch2/list 1 2 3)
         y (ch2/list 4 5 6)]
     (is (= "(1 2 3 4 5 6)\n"
-           (with-out-str (clojure.pprint/pprint (ch2/append x y)))))
+           (with-out-str (pp/pprint (ch2/append x y)))))
 
     (is (= "((1 2 3) 4 5 6)\n"
-           (with-out-str (clojure.pprint/pprint (ch2/cons x y)))))
+           (with-out-str (pp/pprint (ch2/cons x y)))))
 
     (is (= "((1 2 3) (4 5 6))\n"
-           (with-out-str (clojure.pprint/pprint (ch2/list x y)))))))
+           (with-out-str (pp/pprint (ch2/list x y)))))))
 
 (deftest ex27-test
   (let [x (ch2/list (ch2/list 1 2) (ch2/list 3 4))]
     (is (= "((1 2) (3 4))\n"
-           (with-out-str (clojure.pprint/pprint x))))
+           (with-out-str (pp/pprint x))))
 
     (is (= "((3 4) (1 2))\n"
-           (with-out-str (clojure.pprint/pprint (ch2/reverse x)))))
+           (with-out-str (pp/pprint (ch2/reverse x)))))
 
     (is (= "((4 3) (2 1))\n"
-           (with-out-str (clojure.pprint/pprint (ch2/deep-reverse x)))))))
+           (with-out-str (pp/pprint (ch2/deep-reverse x)))))))
+
+(deftest ex28-test
+  (let [x (ch2/list (ch2/list 1 2) (ch2/list 3 4))]
+    (is (= "(1 2 3 4)\n"
+           (with-out-str (pp/pprint (ch2/fringe x)))))
+
+    (is (= "(1 2 3 4 1 2 3 4)\n"
+           (with-out-str (pp/pprint (ch2/fringe (ch2/list x x))))))))
