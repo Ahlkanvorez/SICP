@@ -324,3 +324,15 @@
                          (ch2/list
                           5
                           (ch2/list 6 7)))))))))))))))))))))
+
+(deftest ex26-test
+  (let [x (ch2/list 1 2 3)
+        y (ch2/list 4 5 6)]
+    (is (= "(1 2 3 4 5 6)\n"
+           (with-out-str (clojure.pprint/pprint (ch2/append x y)))))
+
+    (is (= "((1 2 3) 4 5 6)\n"
+           (with-out-str (clojure.pprint/pprint (ch2/cons x y)))))
+
+    (is (= "((1 2 3) (4 5 6))\n"
+           (with-out-str (clojure.pprint/pprint (ch2/list x y)))))))
