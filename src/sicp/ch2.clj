@@ -383,3 +383,15 @@
             (recur (append (reverse f) accum) (cdr coll))
             (recur (cons f accum) (cdr coll))))))
     coll))
+
+(defn make-mobile [left right]
+  (list left right))
+
+(defn make-branch [length structure]
+  (list length structure))
+
+(def left-branch car)
+(def right-branch (compose car cdr))
+
+(def branch-length car)
+(def branch-structure (compose car cdr))

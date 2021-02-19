@@ -356,3 +356,19 @@
 
     (is (= "(1 2 3 4 1 2 3 4)\n"
            (with-out-str (pp/pprint (ch2/fringe (ch2/list x x))))))))
+
+(deftest ex29a-test
+  (let [left (ch2/make-branch 1 2)
+        right (ch2/make-branch 3 4)
+        m (ch2/make-mobile left right)]
+    (is (= left (ch2/left-branch m)))
+
+    (is (= right (ch2/right-branch m)))
+
+    (is (= 1 (ch2/branch-length left)))
+
+    (is (= 3 (ch2/branch-length right)))
+
+    (is (= 2 (ch2/branch-structure left)))
+
+    (is (= 4 (ch2/branch-structure right)))))
