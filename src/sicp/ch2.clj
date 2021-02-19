@@ -27,6 +27,8 @@
 (defmethod print-method Pair [pair writer]
   (print-simple (str pair) writer))
 
+(def pair? (partial instance? Pair))
+
 (defn cons [front back]
   (->Pair front back))
 
@@ -354,3 +356,9 @@
   (when-not (nil? coll)
     (proc (car coll))
     (recur proc (cdr coll))))
+
+(defn count-leaves [x]
+  (cond (nil? x) 0
+        (not (pair? x)) 1
+        :else (+ (count-leaves (car x))
+                 (count-leaves (cdr x)))))

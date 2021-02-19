@@ -258,3 +258,34 @@
            (ch2/for-each println (ch2/list 57 321 88)))))
 
   (is (= nil (ch2/for-each identity (ch2/list 57 321 88)))))
+
+(deftest ex24-test
+  ;; Interpreter:
+  ;;    (1 (2 (3 4)))
+  ;; Box & Whisker:
+  ;;    | 1 |->|/|x|
+  ;;           /
+  ;;        | 2 |->|/|x|
+  ;;               /
+  ;;            | 3 |->| 4 |x|
+  ;; Tree:
+  ;;        .
+  ;;       / \
+  ;;      1   .
+  ;;         /
+  ;;        .
+  ;;       / \
+  ;;      2   .
+  ;;         /
+  ;;        .
+  ;;       / \
+  ;;      3   .
+  ;;         /
+  ;;        4
+  (is (= (ch2/cons 1
+                   (ch2/cons
+                    (ch2/cons 2
+                              (ch2/cons (ch2/cons 3 (ch2/cons 4 nil))
+                                        nil))
+                    nil))
+         (ch2/list 1 (ch2/list 2 (ch2/list 3 4))))))
