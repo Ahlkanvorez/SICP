@@ -289,3 +289,38 @@
                                         nil))
                     nil))
          (ch2/list 1 (ch2/list 2 (ch2/list 3 4))))))
+
+(deftest ex25-test
+  (is (= 7
+         (ch2/car
+          (ch2/cdr
+           (ch2/car
+            (ch2/cdr
+             (ch2/cdr (ch2/list 1 3 (ch2/list 5 7) 9))))))))
+
+  (is (= 7 (ch2/car (ch2/car (ch2/list (ch2/list 7))))))
+
+  (is (= 7
+         (ch2/car
+          (ch2/cdr
+           (ch2/car
+            (ch2/cdr
+             (ch2/car
+              (ch2/cdr
+               (ch2/car
+                (ch2/cdr
+                 (ch2/car
+                  (ch2/cdr
+                   (ch2/car
+                    (ch2/cdr
+                     (ch2/list
+                      1
+                      (ch2/list
+                       2
+                       (ch2/list
+                        3
+                        (ch2/list
+                         4
+                         (ch2/list
+                          5
+                          (ch2/list 6 7)))))))))))))))))))))
