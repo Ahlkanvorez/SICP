@@ -336,3 +336,14 @@
 
     (is (= "((1 2 3) (4 5 6))\n"
            (with-out-str (clojure.pprint/pprint (ch2/list x y)))))))
+
+(deftest ex27-test
+  (let [x (ch2/list (ch2/list 1 2) (ch2/list 3 4))]
+    (is (= "((1 2) (3 4))\n"
+           (with-out-str (clojure.pprint/pprint x))))
+
+    (is (= "((3 4) (1 2))\n"
+           (with-out-str (clojure.pprint/pprint (ch2/reverse x)))))
+
+    (is (= "((4 3) (2 1))\n"
+           (with-out-str (clojure.pprint/pprint (ch2/deep-reverse x)))))))

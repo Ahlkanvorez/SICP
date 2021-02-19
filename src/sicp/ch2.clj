@@ -362,3 +362,12 @@
         (not (pair? x)) 1
         :else (+ (count-leaves (car x))
                  (count-leaves (cdr x)))))
+
+(defn deep-reverse [coll]
+  (loop [accum nil
+         coll coll]
+    (if (nil? coll)
+      accum
+      (if (pair? (car coll))
+        (recur (cons (deep-reverse (car coll)) accum) (cdr coll))
+        (recur (cons (car coll) accum) (cdr coll))))))
