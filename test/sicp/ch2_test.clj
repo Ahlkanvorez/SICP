@@ -1,6 +1,6 @@
 (ns sicp.ch2-test
   (:require [sicp.ch2 :as ch2]
-            [sicp.ch1 :refer [abs]]
+            [sicp.ch1 :refer [abs square]]
             [clojure.pprint :as pp]
             [clojure.test :refer [deftest is]]))
 
@@ -442,10 +442,20 @@
 
 (deftest ex30-test
   (is (= (ch2/list 1
-                   (ch2/list 2 (ch2/list 3 4) 5)
-                   (ch2/list 6 7))
+                   (ch2/list 4 (ch2/list 9 16) 25)
+                   (ch2/list 36 49))
          (ch2/square-tree
           (ch2/list 1
                     (ch2/list 2 (ch2/list 3 4) 5)
                     (ch2/list 6 7))))))
 
+(deftest ex31-test
+  (is (= (ch2/square-tree
+          (ch2/list 1
+                    (ch2/list 2 (ch2/list 3 4) 5)
+                    (ch2/list 6 7)))
+         (ch2/tree-map
+          square
+          (ch2/list 1
+                    (ch2/list 2 (ch2/list 3 4) 5)
+                    (ch2/list 6 7))))))

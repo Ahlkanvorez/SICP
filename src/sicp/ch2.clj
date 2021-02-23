@@ -440,3 +440,11 @@
            (square-tree tree)
            (square tree)))
        tree))
+
+(defn tree-map [f tree]
+  (map (fn [tree]
+         (if (pair? tree)
+           (tree-map f tree)
+           (f tree)))
+       tree))
+
