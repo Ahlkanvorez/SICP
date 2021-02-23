@@ -439,3 +439,13 @@
     (is (= 2 (ch2/branch-structure2 left)))
 
     (is (= 4 (ch2/branch-structure2 right)))))
+
+(deftest ex30-test
+  (is (= (ch2/list 1
+                   (ch2/list 2 (ch2/list 3 4) 5)
+                   (ch2/list 6 7))
+         (ch2/square-tree
+          (ch2/list 1
+                    (ch2/list 2 (ch2/list 3 4) 5)
+                    (ch2/list 6 7))))))
+

@@ -434,3 +434,9 @@
 (def right-branch2 cdr)
 (def branch-structure2 cdr)
 
+(defn square-tree [tree]
+  (map (fn [tree]
+         (if (pair? tree)
+           (square-tree tree)
+           (square tree)))
+       tree))
