@@ -393,3 +393,25 @@
                   (ch2/make-branch 2 2)
                   (ch2/make-branch 3 3)))
                 (ch2/make-branch 4 4))))))))
+
+(deftest ex29c-test
+  (is (ch2/balanced? nil))
+
+  (is (ch2/balanced?
+       (ch2/make-mobile
+        (ch2/make-branch 1 2)
+        (ch2/make-branch 2 1))))
+
+  (is (ch2/balanced?
+       (ch2/make-mobile
+        (ch2/make-branch 1 (ch2/make-mobile
+                            (ch2/make-branch 1 1)
+                            (ch2/make-branch 1 1)))
+        (ch2/make-branch 2 1))))
+
+  (is (ch2/balanced?
+       (ch2/make-mobile
+        (ch2/make-branch 10 (ch2/make-mobile
+                             (ch2/make-branch 6 2)
+                             (ch2/make-branch 3 4)))
+        (ch2/make-branch 20 3)))))

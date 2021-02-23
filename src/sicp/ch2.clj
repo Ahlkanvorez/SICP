@@ -397,14 +397,30 @@
 (def branch-structure (compose car cdr))
 
 (defn total-weight [mobile]
-  (if (nil? mobile)
-    0
-    (let [left (branch-structure (left-branch mobile))
-          right (branch-structure (right-branch mobile))]
-      (+ (if (pair? left)
-           (total-weight left)
-           left)
-         (if (pair? right)
-           (total-weight right)
-           right)))))
+  (cond (pair? mobile)
+        (let [left (branch-structure (left-branch mobile))
+              right (branch-structure (right-branch mobile))]
+          (+ (if (pair? left)
+               (total-weight left)
+               left)
+             (if (pair? right)
+               (total-weight right)
+               right)))
+        (number? mobile) mobile
+        :else 0))
 
+(defn torque [branch]
+  (if (pair? branch)
+    (* (branch-length branch) (total-weight (branch-structure branch)))
+    0))
+
+(defn balanced? [mobile]
+  (cond (pair? mobile)
+        (let [left (left-branch mobile)
+              right (right-branch mobile)]
+          (and (= (torque left) (torque right))
+               (balanced? (branch-structure left))
+               (balanced? (branch-structure right))))
+        (number? mobile) true
+        (nil? mobile) true
+        :else false))
