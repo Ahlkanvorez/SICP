@@ -415,3 +415,27 @@
                              (ch2/make-branch 6 2)
                              (ch2/make-branch 3 4)))
         (ch2/make-branch 20 3)))))
+
+(deftest ex29d-test
+  ;; The accessors for right branches and branch structures must be
+  ;; updated, but the other accessors still work. This also means the
+  ;; total-weight, torque, and balanced? functions would either need
+  ;; to be updated to use the new accessors, or written more generally
+  ;; to accept the accessors they should use, or to use accessors that
+  ;; dispatch properly based on the type of input. A Clojure protocol
+  ;; would be the easiest approach here, where each mobile is a
+  ;; different record implementing the same Protocol.
+  (let [left (ch2/make-branch2 1 2)
+        right (ch2/make-branch2 3 4)
+        m (ch2/make-mobile2 left right)]
+    (is (= left (ch2/left-branch m)))
+
+    (is (= right (ch2/right-branch2 m)))
+
+    (is (= 1 (ch2/branch-length left)))
+
+    (is (= 3 (ch2/branch-length right)))
+
+    (is (= 2 (ch2/branch-structure2 left)))
+
+    (is (= 4 (ch2/branch-structure2 right)))))

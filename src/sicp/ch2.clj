@@ -424,3 +424,13 @@
         (number? mobile) true
         (nil? mobile) true
         :else false))
+
+(defn make-mobile2 [left right]
+  (cons left right))
+
+(defn make-branch2 [length structure]
+  (cons length structure))
+
+(def right-branch2 cdr)
+(def branch-structure2 cdr)
+
