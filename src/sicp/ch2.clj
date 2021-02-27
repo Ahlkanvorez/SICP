@@ -247,12 +247,15 @@
                   (add-interval (div-interval one r1)
                                 (div-interval one r2)))))
 
-(defn list [& coll]
-  (loop [accum nil
-         coll (vec coll)]
-    (if-let [v (peek coll)]
-      (recur (cons v accum) (pop coll))
-      accum)))
+(defn list
+  ([] (list nil))
+  ([v] (cons v nil))
+  ([v & coll]
+   (loop [accum nil
+          coll (vec (conj coll v))]
+     (if-let [v (peek coll)]
+       (recur (cons v accum) (pop coll))
+       accum))))
 
 (defn list-ref [items n]
   (if (zero? n)
@@ -374,7 +377,7 @@
 
 (defn fringe [coll]
   (if (pair? coll)
-    (loop [accum (list)
+    (loop [accum nil
            coll coll]
       (if (nil? coll)
         (reverse accum)
@@ -448,3 +451,13 @@
            (f tree)))
        tree))
 
+(defn subsets [s]
+  (if (nil? s)
+    (list (list nil))
+    (let [rest (subsets (cdr s))]
+      (println :r rest)
+      (append rest
+              (map (fn [subset]
+                     (cond (= subset (list nil)) (list (car s))
+                           :else (cons (car s) subset)))
+                   rest)))))

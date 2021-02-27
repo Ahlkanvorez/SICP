@@ -202,9 +202,9 @@
     (is (not= x (ch2/div-interval x (ch2/mul-interval x x))))))
 
 (deftest ex17-test
-  (is (= (ch2/cons 34 nil) (ch2/last-pair (ch2/list 23 72 149 34))))
-  (is (= nil (ch2/last-pair (ch2/list))))
-  (is (= (ch2/cons 1 nil) (ch2/last-pair (ch2/list 1)))))
+  (is (= (ch2/list 34) (ch2/last-pair (ch2/list 23 72 149 34))))
+  (is (= (ch2/list nil) (ch2/last-pair (ch2/list))))
+  (is (= (ch2/list 1) (ch2/last-pair (ch2/list 1)))))
 
 (deftest ex18-test
   (is (= (ch2/list 25 16 9 4 1) (ch2/reverse (ch2/list 1 4 9 16 25))))
@@ -459,3 +459,14 @@
           (ch2/list 1
                     (ch2/list 2 (ch2/list 3 4) 5)
                     (ch2/list 6 7))))))
+
+(deftest ex32-test
+  (is (= (ch2/list (ch2/list)
+                   (ch2/list 3)
+                   (ch2/list 2)
+                   (ch2/list 2 3)
+                   (ch2/list 1)
+                   (ch2/list 1 3)
+                   (ch2/list 1 2)
+                   (ch2/list 1 2 3))
+         (ch2/subsets (ch2/list 1 2 3)))))
