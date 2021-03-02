@@ -538,3 +538,10 @@
                                                  (ch2/list 2 3))
                                        (ch2/list 4
                                                  (ch2/list 5 6)))))))
+
+(deftest ex36-test
+  (is (= (ch2/list 22 26 30)
+         (ch2/accumulate-n + 0 (ch2/list (ch2/list 1 2 3)
+                                         (ch2/list 4 5 6)
+                                         (ch2/list 7 8 9)
+                                         (ch2/list 10 11 12))))))

@@ -33,10 +33,10 @@
   (->Pair front back))
 
 (defn car [pair]
-  (.-front pair))
+  (when pair (.-front pair)))
 
 (defn cdr [pair]
-  (.-back pair))
+  (when pair (.-back pair)))
 
 (defn make-rat [n d]
   (let [g (gcd n d)]
@@ -531,3 +531,8 @@
 (defn count-leaves [t]
   (accumulate + 0 (map (constantly 1) (fringe t))))
 
+(defn accumulate-n [op init seqs]
+  (if (nil? (car seqs))
+    nil
+    (cons (accumulate op init (map car seqs))
+          (accumulate-n op init (map cdr seqs)))))
