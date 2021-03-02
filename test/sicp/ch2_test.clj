@@ -2,7 +2,7 @@
   (:require [sicp.ch2 :as ch2]
             [sicp.ch1 :refer [abs square]]
             [clojure.pprint :as pp]
-            [clojure.test :refer [deftest is]]))
+            [clojure.test :refer [deftest is testing]]))
 
 (def one-third (ch2/make-rat 1 3))
 
@@ -203,7 +203,7 @@
 
 (deftest ex17-test
   (is (= (ch2/list 34) (ch2/last-pair (ch2/list 23 72 149 34))))
-  (is (= (ch2/list nil) (ch2/last-pair (ch2/list))))
+  (is (= nil (ch2/last-pair (ch2/list))))
   (is (= (ch2/list 1) (ch2/last-pair (ch2/list 1)))))
 
 (deftest ex18-test
@@ -461,7 +461,7 @@
                     (ch2/list 6 7))))))
 
 (deftest ex32-test
-  (is (= (ch2/list (ch2/list)
+  (is (= (ch2/list (ch2/list nil)
                    (ch2/list 3)
                    (ch2/list 2)
                    (ch2/list 2 3)
@@ -470,3 +470,49 @@
                    (ch2/list 1 2)
                    (ch2/list 1 2 3))
          (ch2/subsets (ch2/list 1 2 3)))))
+
+(deftest filter-test
+  (is (= (ch2/list 1 3 5) (ch2/filter odd? (ch2/list 1 2 3 4 5)))))
+
+(deftest accumulate-test
+  (is (= 15 (ch2/accumulate + 0 (ch2/list 1 2 3 4 5))))
+
+  (is (= 120 (ch2/accumulate * 1 (ch2/list 1 2 3 4 5))))
+
+  (is (= (ch2/list 1 2 3 4 5)
+         (ch2/accumulate ch2/cons nil (ch2/list 1 2 3 4 5)))))
+
+(deftest enumerate-interval-test
+  (is (= (ch2/list 2 3 4 5 6 7)
+         (ch2/enumerate-interval 2 7))))
+
+(deftest enumerate-tree-test
+  (is (= (ch2/list 1 2 3 4 5)
+         (ch2/enumerate-tree (ch2/list 1
+                                       (ch2/list 2
+                                                 (ch2/list 3 4))
+                                       5)))))
+
+(deftest list-fib-squares-test
+  (is (= (ch2/list 0 1 1 4 9 25 64 169 441 1156 3025)
+         (ch2/list-fib-squares 10))))
+
+(deftest product-of-squares-of-odd-elements-test
+  (is (= 225
+         (ch2/product-of-squares-of-odd-elements
+          (ch2/list 1 2 3 4 5)))))
+
+(deftest ex33-test
+  (testing "map"
+    (is (= (ch2/list 1 4 9 16 25 36 49)
+           (ch2/map square (ch2/enumerate-interval 1 7)))))
+
+  (testing "append"
+    (is (= (ch2/list 1 2 3 4 5 6)
+           (ch2/append (ch2/list 1 2 3)
+                       (ch2/list 4 5 6)))))
+
+  (testing "length"
+    (is (= 0 (ch2/length (ch2/list))))
+    (is (= 3 (ch2/length (ch2/list 1 2 3))))
+    (is (= 4 (ch2/length (ch2/list 1 2 3 4))))))

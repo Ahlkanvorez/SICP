@@ -1,8 +1,8 @@
 (ns sicp.ch2
-  (:refer-clojure :exclude [cons list map])
+  (:refer-clojure :exclude [cons filter list map reverse])
   (:require
    [sicp.ch1
-    :refer [abs average compose fast-expt-iter gcd square]]))
+    :refer [abs average compose fast-expt-iter fib gcd square]]))
 
 (deftype Pair [front back]
   Object
@@ -248,7 +248,7 @@
                                 (div-interval one r2)))))
 
 (defn list
-  ([] (list nil))
+  ([] nil)
   ([v] (cons v nil))
   ([v & coll]
    (loop [accum nil
@@ -455,9 +455,69 @@
   (if (nil? s)
     (list (list nil))
     (let [rest (subsets (cdr s))]
-      (println :r rest)
       (append rest
               (map (fn [subset]
                      (cond (= subset (list nil)) (list (car s))
                            :else (cons (car s) subset)))
                    rest)))))
+
+(defn filter [predicate sequence]
+  (cond (nil? sequence) nil
+        (predicate (car sequence))
+        (cons (car sequence)
+              (filter predicate (cdr sequence)))
+        :else (filter predicate (cdr sequence))))
+
+
+(defn accumulate [op initial sequence]
+  (if (nil? sequence)
+    initial
+    (op (car sequence)
+        (accumulate op initial (cdr sequence)))))
+
+(defn enumerate-interval [low high]
+  (if (> low high)
+    nil
+    (cons low (enumerate-interval (inc low) high))))
+
+(defn enumerate-tree [tree]
+  (cond (nil? tree) nil
+        (not (pair? tree)) (list tree)
+        :else (append (enumerate-tree (car tree))
+                      (enumerate-tree (cdr tree)))))
+
+(defn sum-odd-squares [tree]
+  (accumulate +
+              0
+              (map square
+                   (filter odd?
+                           (enumerate-tree tree)))))
+
+(defn even-fibs [n]
+  (accumulate cons
+              nil
+              (filter even?
+                      (map fib
+                           (enumerate-interval 0 n)))))
+
+(defn list-fib-squares [n]
+  (accumulate cons
+              nil
+              (map square
+                   (map fib
+                        (enumerate-interval 0 n)))))
+
+(defn product-of-squares-of-odd-elements [sequence]
+  (accumulate *
+              1
+              (map square
+                   (filter odd? sequence))))
+
+(defn map [p sequence]
+  (accumulate (fn [x y] (cons (p x) y)) nil sequence))
+
+(defn append [seq1 seq2]
+  (accumulate cons seq2 seq1))
+
+(defn length [sequence]
+  (accumulate (fn [x length] (inc length)) 0 sequence))
