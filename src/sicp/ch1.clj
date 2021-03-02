@@ -1,4 +1,5 @@
 (ns sicp.ch1
+  (:refer-clojure :exclude [double])
   (:require [clojure.string :as str]))
 
 (defn square [x] (*' x x))
@@ -596,7 +597,9 @@
 (defn fixed-point-showing-work [f first-guess]
   (fixed-point (fn [x]
                  (let [v (f x)]
-                   (printf "f(%.10f) = %.10f%n" (double x) (double v))
+                   (printf "f(%.10f) = %.10f%n"
+                           (clojure.core/double x)
+                           (clojure.core/double v))
                    v))
                first-guess))
 
@@ -630,7 +633,7 @@
                 1)))]
     (+ 2 (cont-frac n d k))))
 
-(def e (double (euler-e 20)))
+(def e (clojure.core/double (euler-e 20)))
 
 (defn tan-cf [x k]
   (letfn [(n [i] (if (zero? i)
