@@ -527,3 +527,7 @@
                 (+ this-coeff (* x higher-terms)))
               0
               coefficient-sequence))
+
+(defn count-leaves [t]
+  (accumulate + 0 (map (constantly 1) (fringe t))))
+

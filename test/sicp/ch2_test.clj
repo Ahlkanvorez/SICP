@@ -520,3 +520,21 @@
 (deftest ex34-test
   (is (= (+ 1 (* 3 2) (* 5 8) 32)
          (ch2/horner-eval 2 (ch2/list 1 3 0 5 0 1)))))
+
+(deftest ex35-test
+  (is (= 0 (ch2/count-leaves (ch2/list))))
+
+  (is (= 2 (ch2/count-leaves (ch2/list 1 2))))
+
+  (is (= 4 (ch2/count-leaves (ch2/list (ch2/list 1 2)
+                                       (ch2/list 3 4)))))
+
+  (is (= 5 (ch2/count-leaves (ch2/list 0
+                                       (ch2/list 1 2)
+                                       (ch2/list 3 4)))))
+
+  (is (= 7 (ch2/count-leaves (ch2/list 0
+                                       (ch2/list 1
+                                                 (ch2/list 2 3))
+                                       (ch2/list 4
+                                                 (ch2/list 5 6)))))))
