@@ -521,3 +521,9 @@
 
 (defn length [sequence]
   (accumulate (fn [x length] (inc length)) 0 sequence))
+
+(defn horner-eval [x coefficient-sequence]
+  (accumulate (fn [this-coeff higher-terms]
+                (+ this-coeff (* x higher-terms)))
+              0
+              coefficient-sequence))

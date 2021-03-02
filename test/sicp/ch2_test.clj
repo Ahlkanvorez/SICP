@@ -516,3 +516,7 @@
     (is (= 0 (ch2/length (ch2/list))))
     (is (= 3 (ch2/length (ch2/list 1 2 3))))
     (is (= 4 (ch2/length (ch2/list 1 2 3 4))))))
+
+(deftest ex34-test
+  (is (= (+ 1 (* 3 2) (* 5 8) 32)
+         (ch2/horner-eval 2 (ch2/list 1 3 0 5 0 1)))))
