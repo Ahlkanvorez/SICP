@@ -503,16 +503,22 @@
           (ch2/list 1 2 3 4 5)))))
 
 (deftest ex33-test
-  (testing "map"
+  (testing 'sicp.ch2/map
     (is (= (ch2/list 1 4 9 16 25 36 49)
-           (ch2/map square (ch2/enumerate-interval 1 7)))))
+           (ch2/map square (ch2/enumerate-interval 1 7))))
 
-  (testing "append"
+    (is (= (ch2/list 10 200 3000)
+           (ch2/map * (ch2/list 1 2 3) (ch2/list 10 100 1000))))
+
+    (is (= (ch2/list 11 22 33)
+           (ch2/map + (ch2/list 1 2 3) (ch2/list 10 20 30)))))
+
+  (testing 'sicp.ch2/append
     (is (= (ch2/list 1 2 3 4 5 6)
            (ch2/append (ch2/list 1 2 3)
                        (ch2/list 4 5 6)))))
 
-  (testing "length"
+  (testing 'sicp.ch2/length
     (is (= 0 (ch2/length (ch2/list))))
     (is (= 3 (ch2/length (ch2/list 1 2 3))))
     (is (= 4 (ch2/length (ch2/list 1 2 3 4))))))
@@ -545,3 +551,98 @@
                                          (ch2/list 4 5 6)
                                          (ch2/list 7 8 9)
                                          (ch2/list 10 11 12))))))
+
+(deftest ex37-test
+  (let [m (ch2/list (ch2/list 1 2 3 4)
+                    (ch2/list 4 5 6 6)
+                    (ch2/list 6 7 8 9))]
+    (testing 'sicp.ch2/dot-product
+      (is (= 0
+             (ch2/dot-product (ch2/list 1 2 3 4 5)
+                              (ch2/list 0 0 0 0 0))))
+
+      (is (= 10
+             (ch2/dot-product (ch2/list 1 2 3)
+                              (ch2/list 3 2 1)))))
+
+    (testing 'sicp.ch2/matrix-*-vector
+      (is (= (ch2/list 0 0 0)
+             (ch2/matrix-*-vector m
+                                  (ch2/list 0
+                                            0
+                                            0
+                                            0))))
+
+      (is (= (ch2/list 1 4 6)
+             (ch2/matrix-*-vector m
+                                  (ch2/list 1
+                                            0
+                                            0
+                                            0))))
+
+      (is (= (ch2/list 2 5 7)
+             (ch2/matrix-*-vector m
+                                  (ch2/list 0
+                                            1
+                                            0
+                                            0))))
+
+      (is (= (ch2/list 3 6 8)
+             (ch2/matrix-*-vector m
+                                  (ch2/list 0
+                                            0
+                                            1
+                                            0))))
+
+      (is (= (ch2/list 4 6 9)
+             (ch2/matrix-*-vector m
+                                  (ch2/list 0
+                                            0
+                                            0
+                                            1))))
+
+      (is (= (ch2/list 10 21 30)
+             (ch2/matrix-*-vector m
+                                  (ch2/list 1
+                                            1
+                                            1
+                                            1)))))
+
+    (testing 'sicp.ch2/transpose
+      (is (= (ch2/list (ch2/list 1 10)
+                       (ch2/list 2 20)
+                       (ch2/list 3 30))
+             (ch2/transpose
+              (ch2/list (ch2/list 1 2 3)
+                        (ch2/list 10 20 30))))))
+
+    (testing 'sicp.ch2/matrix-*-matrix
+      (is (= m
+             (ch2/matrix-*-matrix m (ch2/list (ch2/list 1 0 0 0)
+                                              (ch2/list 0 1 0 0)
+                                              (ch2/list 0 0 1 0)
+                                              (ch2/list 0 0 0 1)))))
+
+      (is (= (ch2/list (ch2/list -1 0)
+                       (ch2/list 0 -1))
+             (ch2/matrix-*-matrix (ch2/list (ch2/list 0 1)
+                                            (ch2/list -1 0))
+                                  (ch2/list (ch2/list 0 1)
+                                            (ch2/list -1 0)))))
+
+      (is (= (ch2/list (ch2/list 1 0)
+                       (ch2/list 0 1))
+             (ch2/matrix-*-matrix (ch2/list (ch2/list -1 0)
+                                            (ch2/list 0 -1))
+                                  (ch2/list (ch2/list -1 0)
+                                            (ch2/list 0 -1)))))
+
+      (is (= (ch2/list (ch2/list 10 7 4 1)
+                       (ch2/list 26 19 12 5)
+                       (ch2/list 42 31 20 9))
+             (ch2/matrix-*-matrix (ch2/list (ch2/list 1 2)
+                                            (ch2/list 3 4)
+                                            (ch2/list 5 6))
+                                  (ch2/list (ch2/list 6 5 4 3)
+                                            (ch2/list 2 1 0 -1))))))))
+

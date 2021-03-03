@@ -513,9 +513,6 @@
               (map square
                    (filter odd? sequence))))
 
-(defn map [p sequence]
-  (accumulate (fn [x y] (cons (p x) y)) nil sequence))
-
 (defn append [seq1 seq2]
   (accumulate cons seq2 seq1))
 
@@ -536,3 +533,33 @@
     nil
     (cons (accumulate op init (map car seqs))
           (accumulate-n op init (map cdr seqs)))))
+
+(defn transpose [mat]
+  (accumulate-n cons nil mat))
+
+(defn cons->vec [list]
+  (loop [coll []
+         list list]
+    (if-let [v (car list)]
+      (recur (conj coll v) (cdr list))
+      coll)))
+
+(defn map
+  ([p sequence]
+   (accumulate (fn [x y] (cons (p x) y)) nil sequence))
+  ([p seq & seqs]
+   (let [seqs (cons seq (apply list seqs))]
+     (accumulate (fn [seqs accum]
+                   (cons (apply p (cons->vec seqs)) accum))
+                 nil
+                 (transpose seqs)))))
+
+(defn dot-product [v w]
+  (accumulate + 0 (map * v w)))
+
+(defn matrix-*-vector [m v]
+  (map (fn [row] (dot-product row v)) m))
+
+(defn matrix-*-matrix [m n]
+  (let [cols (transpose n)]
+    (map (fn [row] (matrix-*-vector cols row)) m)))
