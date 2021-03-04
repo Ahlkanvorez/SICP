@@ -646,3 +646,23 @@
                                   (ch2/list (ch2/list 6 5 4 3)
                                             (ch2/list 2 1 0 -1))))))))
 
+(deftest ex38-test
+  (is (= 3/2 (ch2/fold-right / 1 (ch2/list 1 2 3))))
+
+  (is (= 1/6 (ch2/fold-left / 1 (ch2/list 1 2 3))))
+
+  (is (= (ch2/list 1 (ch2/list 2 (ch2/list 3 (ch2/list))))
+         (ch2/fold-right ch2/list nil (ch2/list 1 2 3))))
+
+  (is (= (ch2/list (ch2/list (ch2/list (ch2/list) 1) 2) 3)
+         (ch2/fold-left ch2/list nil (ch2/list 1 2 3))))
+
+  ;; For fold-right & fold-left to produce the same results, the
+  ;; combining op should be associative.
+  (is (= (+ 1 2 3 4 5 6 7 8 9 10)
+         (ch2/fold-right + 0 (ch2/enumerate-interval 1 10))
+         (ch2/fold-left + 0 (ch2/enumerate-interval 1 10))))
+
+  (is (= (* 1 2 3 4 5 6 7 8 9 10)
+         (ch2/fold-right * 1 (ch2/enumerate-interval 1 10))
+         (ch2/fold-left * 1 (ch2/enumerate-interval 1 10)))))

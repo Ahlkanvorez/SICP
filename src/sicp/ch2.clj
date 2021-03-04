@@ -249,12 +249,11 @@
 
 (defn list
   ([] nil)
-  ([v] (cons v nil))
   ([v & coll]
    (loop [accum nil
           coll (vec (conj coll v))]
-     (if-let [v (peek coll)]
-       (recur (cons v accum) (pop coll))
+     (if (seq coll)
+       (recur (cons (peek coll) accum) (pop coll))
        accum))))
 
 (defn list-ref [items n]
@@ -563,3 +562,13 @@
 (defn matrix-*-matrix [m n]
   (let [cols (transpose n)]
     (map (fn [row] (matrix-*-vector cols row)) m)))
+
+(def fold-right accumulate)
+
+(defn fold-left [op initial sequence]
+  (loop [result initial
+         rest sequence]
+    (if (nil? rest)
+      result
+      (recur (op result (car rest))
+             (cdr rest)))))
