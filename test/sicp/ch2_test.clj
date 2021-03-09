@@ -666,3 +666,10 @@
   (is (= (* 1 2 3 4 5 6 7 8 9 10)
          (ch2/fold-right * 1 (ch2/enumerate-interval 1 10))
          (ch2/fold-left * 1 (ch2/enumerate-interval 1 10)))))
+
+(deftest ex39-test
+  (is (= (ch2/list 5 4 3 2 1)
+         (ch2/reverse-via-foldr (ch2/list 1 2 3 4 5))))
+
+  (is (= (ch2/list 5 4 3 2 1)
+         (ch2/reverse-via-foldl (ch2/list 1 2 3 4 5)))))

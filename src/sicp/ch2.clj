@@ -572,3 +572,9 @@
       result
       (recur (op result (car rest))
              (cdr rest)))))
+
+(defn reverse-via-foldr [sequence]
+  (fold-right (fn [x y] (append y (list x))) nil sequence))
+
+(defn reverse-via-foldl [sequence]
+  (fold-left (fn [x y] (cons y x)) nil sequence))
