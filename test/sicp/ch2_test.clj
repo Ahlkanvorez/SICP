@@ -673,3 +673,24 @@
 
   (is (= (ch2/list 5 4 3 2 1)
          (ch2/reverse-via-foldl (ch2/list 1 2 3 4 5)))))
+
+(deftest ex40-test
+  (testing 'sicp.ch2/prime-sum-pairs
+    (is (= (ch2/list (ch2/list 2 1 3))
+           (ch2/prime-sum-pairs 2)))
+
+    (is (= (ch2/list (ch2/list 2 1 3) (ch2/list 3 2 5))
+           (ch2/prime-sum-pairs 3))))
+
+  (testing 'sicp.ch2/unique-pairs
+    (is (= (ch2/list (ch2/list 2 1))
+           (ch2/unique-pairs 2)))
+
+    (is (= (ch2/list (ch2/list 2 1)
+                     (ch2/list 3 1) (ch2/list 3 2))
+           (ch2/unique-pairs 3)))
+
+    (is (= (ch2/list (ch2/list 2 1)
+                     (ch2/list 3 1) (ch2/list 3 2)
+                     (ch2/list 4 1) (ch2/list 4 2) (ch2/list 4 3))
+           (ch2/unique-pairs 4)))))

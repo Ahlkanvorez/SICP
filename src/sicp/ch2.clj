@@ -1,8 +1,8 @@
 (ns sicp.ch2
-  (:refer-clojure :exclude [cons filter list map reverse])
+  (:refer-clojure :exclude [cons filter list map reverse remove])
   (:require
    [sicp.ch1
-    :refer [abs average compose fast-expt-iter fib gcd square]]))
+    :refer [abs average compose fast-expt-iter fib gcd square prime?]]))
 
 (deftype Pair [front back]
   Object
@@ -578,3 +578,34 @@
 
 (defn reverse-via-foldl [sequence]
   (fold-left (fn [x y] (cons y x)) nil sequence))
+
+(defn flatmap [proc seq]
+  (accumulate append nil (map proc seq)))
+
+(defn prime-sum? [pair]
+  (prime? (+ (car pair) (car (cdr pair)))))
+
+(defn make-pair-sum [pair]
+  (list (car pair)
+        (car (cdr pair))
+        (+ (car pair) (car (cdr pair)))))
+
+(defn unique-pairs [n]
+  (flatmap (fn [i]
+             (map (fn [j] (list i j))
+                  (enumerate-interval 1 (dec i))))
+           (enumerate-interval 1 n)))
+
+(defn prime-sum-pairs [n]
+  (map make-pair-sum (filter prime-sum? (unique-pairs n))))
+
+(defn remove [item sequence]
+  (filter (fn [x] (not= x item)) sequence))
+
+(defn permutations [s]
+  (if (nil? s)
+    (list nil)
+    (flatmap (fn [x]
+               (map (fn [p] (cons x p))
+                    (permutations (remove x s))))
+             s)))
