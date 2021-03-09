@@ -609,3 +609,23 @@
                (map (fn [p] (cons x p))
                     (permutations (remove x s))))
              s)))
+
+(defn ordered-triples [n]
+  (flatmap (fn [i]
+             (map (fn [pair] (cons i pair))
+                  (unique-pairs (dec i))))
+           (enumerate-interval 1 n)))
+
+(defn triple-sum [triple]
+  (accumulate + 0 triple))
+
+(defn triple-sum? [s]
+  (fn [triple]
+    (= s (triple-sum triple))))
+
+(defn make-triple-sum [triple]
+  (list (car triple) (car (cdr triple)) (car (cdr (cdr triple)))
+        (triple-sum triple)))
+
+(defn ordered-triples-summing-to [s n]
+  (map make-triple-sum (filter (triple-sum? s) (ordered-triples n))))

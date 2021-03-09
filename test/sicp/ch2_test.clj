@@ -694,3 +694,23 @@
                      (ch2/list 3 1) (ch2/list 3 2)
                      (ch2/list 4 1) (ch2/list 4 2) (ch2/list 4 3))
            (ch2/unique-pairs 4)))))
+
+(deftest ex41-test
+  (testing 'sicp.ch2/ordered-triples
+    (is (= (ch2/list (ch2/list 3 2 1))
+           (ch2/ordered-triples 3)))
+
+    (is (= (ch2/list (ch2/list 3 2 1)
+                     (ch2/list 4 2 1) (ch2/list 4 3 1) (ch2/list 4 3 2))
+           (ch2/ordered-triples 4))))
+
+  (testing 'sicp.ch2/ordered-triples-summing-to
+    (is (= (ch2/list (ch2/list 3 2 1 6))
+           (ch2/ordered-triples-summing-to 6 3)))
+
+    (is (= (ch2/list (ch2/list 4 3 1 8))
+           (ch2/ordered-triples-summing-to 8 4)))
+
+    (is (= (ch2/list (ch2/list 4 3 1 8)
+                     (ch2/list 5 2 1 8))
+           (ch2/ordered-triples-summing-to 8 5)))))
