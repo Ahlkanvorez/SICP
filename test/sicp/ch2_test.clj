@@ -746,3 +746,19 @@
                                           (ch2/list 3 1))))
                            (ch2/queens 8))))))
 
+
+;;; ex 2.43
+;;; The procedure in 2.42 generates one recursive call each invocation,
+;;; whereas the version below produces T=board-size recursive calls each
+;;; iteration. Thus, in the former case, queen-cols will be invoked
+;;; T + 1 times, i.e. the procedure runs in O(T) steps, whereas in the
+;;; latter case, queen-cols will be invoked O(T^T) times -- when T=6,
+;;; this results in 46656 invocations, each generating lists to be
+;;; mapped & filtered.
+#_(flatmap
+   (fn [new-row]
+     (map (fn [rest-of-queens]
+            (adjoin-position new-row k rest-of-queens))
+          (queen-cols (dec k))))
+   (enumerate-interval 1 board-size))
+
