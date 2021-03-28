@@ -714,3 +714,35 @@
     (is (= (ch2/list (ch2/list 4 3 1 8)
                      (ch2/list 5 2 1 8))
            (ch2/ordered-triples-summing-to 8 5)))))
+
+(deftest ex42-test
+  (testing 'sicp.ch2/queens
+    (is (= (ch2/list (ch2/list (ch2/list 1 1)))
+           (ch2/queens 1)))
+
+    (is (= (ch2/list) (ch2/queens 2)))
+
+    (is (= (ch2/list) (ch2/queens 3)))
+
+    (is (= (ch2/list (ch2/list (ch2/list 3 4)
+                               (ch2/list 1 3)
+                               (ch2/list 4 2)
+                               (ch2/list 2 1))
+                     (ch2/list (ch2/list 2 4)
+                               (ch2/list 4 3)
+                               (ch2/list 1 2)
+                               (ch2/list 3 1)))
+           (ch2/queens 4)))
+
+    (is (some? (ch2/filter (fn [positions]
+                             (= positions
+                                (ch2/list (ch2/list 6 8)
+                                          (ch2/list 4 7)
+                                          (ch2/list 1 6)
+                                          (ch2/list 5 5)
+                                          (ch2/list 8 4)
+                                          (ch2/list 2 3)
+                                          (ch2/list 7 2)
+                                          (ch2/list 3 1))))
+                           (ch2/queens 8))))))
+

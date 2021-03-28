@@ -629,3 +629,32 @@
 
 (defn ordered-triples-summing-to [s n]
   (map make-triple-sum (filter (triple-sum? s) (ordered-triples n))))
+
+(def empty-board (list))
+
+(defn safe? [k positions]
+  (let [pos (car (filter (fn [p] (= k (car (cdr p)))) positions))
+        row (car pos)
+        col (car (cdr pos))]
+    (letfn [(slope-to [p] (/ (- col (car (cdr p))) (- row (car p))))
+            (same-row? [p] (= row (car p)))
+            (diagonal? [p] (= 1 (abs (slope-to p))))
+            (in-check? [p] (or (same-row? p) (diagonal? p)))]
+      (nil? (filter in-check? (remove pos positions))))))
+
+(defn adjoin-position [new-row k rest-of-queens]
+  (cons (list new-row k) rest-of-queens))
+
+(defn queens [board-size]
+  (letfn [(queen-cols [k]
+            (if (zero? k)
+              (list empty-board)
+              (filter
+               (fn [positions] (safe? k positions))
+               (flatmap
+                (fn [rest-of-queens]
+                  (map (fn [new-row]
+                         (adjoin-position new-row k rest-of-queens))
+                       (enumerate-interval 1 board-size)))
+                (queen-cols (dec k))))))]
+    (queen-cols board-size)))
