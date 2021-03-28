@@ -630,6 +630,15 @@
 (defn ordered-triples-summing-to [s n]
   (map make-triple-sum (filter (triple-sum? s) (ordered-triples n))))
 
+(defn filter [pred coll]
+  (reverse
+   (fold-left (fn [accum x]
+                (if (pred x)
+                  (cons x accum)
+                  accum))
+              nil
+              coll)))
+
 (def empty-board (list))
 
 (defn safe? [k positions]
