@@ -2,7 +2,15 @@
   (:refer-clojure :exclude [cons filter list map reverse remove])
   (:require
    [sicp.ch1
-    :refer [abs average compose fast-expt-iter fib gcd square prime?]]))
+    :refer [abs average compose fast-expt-iter fib gcd square prime?]])
+  (:import
+   [java.awt Color Component Dimension Graphics Graphics2D Image]
+   [java.awt.event WindowAdapter WindowEvent]
+   [java.awt.geom AffineTransform]
+   [java.awt.image BufferedImage]
+   [java.io File]
+   [javax.imageio ImageIO]
+   [javax.swing JFrame]))
 
 (deftype Pair [front back]
   Object
@@ -667,3 +675,149 @@
                        (enumerate-interval 1 board-size)))
                 (queen-cols (dec k))))))]
     (queen-cols board-size)))
+
+(defn draw [image]
+  (doto (JFrame. "SICP Paintings")
+    (.addWindowListener (proxy [WindowAdapter] []
+                          (windowClosing [^WindowEvent e]
+                            (println :closing))))
+    (.add (proxy [Component] []
+            (getPreferredSize []
+              (Dimension. (.getWidth image nil)
+                          (.getHeight image nil)))
+            (paint [^Graphics g]
+              (.drawImage g image 0 0 nil))))
+    (.pack)
+    (.setVisible true)))
+
+(defn apply-transform [^AffineTransform f ^BufferedImage v w h]
+  (let [^BufferedImage r (BufferedImage. w h BufferedImage/TYPE_INT_RGB)
+        ^Graphics2D g (.createGraphics r)]
+    (.drawImage g v f nil)
+    r))
+
+(defn translate-x [^BufferedImage a ^double dx]
+  (let [width (.getWidth a nil)
+        height (.getHeight a nil)
+        new-width (+ width dx)
+        result (BufferedImage. new-width height BufferedImage/TYPE_INT_RGB)
+        f (AffineTransform/getTranslateInstance dx 0.0)
+        scaled-a (apply-transform f a new-width height)]
+    (.setData result (.getData scaled-a))
+    result))
+
+(defn translate-y [^BufferedImage a ^double dy]
+  (let [width (.getWidth a nil)
+        height (.getHeight a nil)
+        new-height (+ height dy)
+        result (BufferedImage. width new-height BufferedImage/TYPE_INT_RGB)
+        f (AffineTransform/getTranslateInstance 0.0 dy)
+        scaled-a (apply-transform f a width new-height)]
+    (.setData result (.getData scaled-a))
+    result))
+
+(defn scale-x [^BufferedImage a ^double new-width]
+  (let [width (.getWidth a nil)
+        height (.getHeight a nil)
+        result (BufferedImage. new-width height BufferedImage/TYPE_INT_RGB)
+        f (AffineTransform/getScaleInstance (/ new-width width) 1.0)
+        scaled-a (apply-transform f a new-width height)]
+    (.setData result (.getData scaled-a))
+    result))
+
+(defn scale-y [^BufferedImage a ^double new-height]
+  (let [width (.getWidth a nil)
+        height (.getHeight a nil)
+        result (BufferedImage. width new-height BufferedImage/TYPE_INT_RGB)
+        f (AffineTransform/getScaleInstance 1.0 (/ new-height height))
+        scaled-a (apply-transform f a width new-height)]
+    (.setData result (.getData scaled-a))
+    result))
+
+(defn reflect-x [^BufferedImage a]
+  (let [width (.getWidth a nil)
+        height (.getHeight a nil)
+        result (BufferedImage. width height BufferedImage/TYPE_INT_RGB)
+        f (doto (AffineTransform.)
+            (.setTransform 1.0  0.0
+                           0.0 -1.0
+                           0.0 height))
+        reflected-a (apply-transform f a width height)]
+    (.setData result (.getData reflected-a))
+    result))
+
+(defn reflect-y [^BufferedImage a]
+  (let [width (.getWidth a nil)
+        height (.getHeight a nil)
+        result (BufferedImage. width height BufferedImage/TYPE_INT_RGB)
+        f (doto (AffineTransform.)
+            (.setTransform -1.0  0.0
+                           0.0   1.0
+                           width 0.0))
+        reflected-a (apply-transform f a width height)]
+    (.setData result (.getData reflected-a))
+    result))
+
+(defn beside [^BufferedImage a ^BufferedImage b]
+  (let [w-a (.getWidth a nil)
+        w-b (.getWidth b nil)
+        h-a (.getHeight a nil)
+        h (max h-a (.getHeight b nil))
+        result (BufferedImage. (+ w-a w-b) h BufferedImage/TYPE_INT_RGB)
+        ^Graphics2D g (.createGraphics result)]
+    (.drawImage g (scale-y (translate-x b w-a) h) nil 0 0)
+    (.drawImage g (scale-y a h) nil 0 0)
+    result))
+
+(defn below [^BufferedImage a ^BufferedImage b]
+  (let [w-a (.getWidth a nil)
+        w (max w-a (.getWidth b nil))
+        h-a (.getHeight a nil)
+        h-b (.getHeight b nil)
+        result (BufferedImage. w (+ h-a h-b) BufferedImage/TYPE_INT_RGB)
+        ^Graphics2D g (.createGraphics result)]
+    (.drawImage g (scale-x (translate-y b h-a) w) nil 0 0)
+    (.drawImage g (scale-x a w) nil 0 0)
+    result))
+
+(defn flip-vert [^BufferedImage painter]
+  (let [w (.getWidth painter nil)
+        h (.getHeight painter nil)
+        result (BufferedImage. w h BufferedImage/TYPE_INT_RGB)
+        ^Graphics2D g (.createGraphics result)]
+    (.drawImage g (reflect-x painter) nil 0 0)
+    result))
+
+(def barton
+  (ImageIO/read (File. "resources/ch2/william_barton_rogers.jpg")))
+
+(def barton2 (beside barton barton))
+(def barton4 (below barton2 barton2))
+
+(defn flipped-pairs [^BufferedImage painter]
+  (let [painter2 (beside painter (flip-vert painter))]
+    (below painter2 painter2)))
+
+(defn right-split [painter n]
+  (if (zero? n)
+    painter
+    (let [smaller (right-split painter (dec n))]
+      (beside (scale-x painter (* 2 (.getWidth painter nil)))
+              (below smaller
+                     smaller)))))
+
+(defn up-split [painter n]
+  (if (zero? n)
+    painter
+    (let [smaller (up-split painter (dec n))]
+      (below (beside smaller smaller)
+             (scale-y painter (* 2 (.getHeight painter nil)))))))
+
+(defn corner-split [painter n]
+  (if (zero? n)
+    painter
+    (let [right (right-split painter (dec n))
+          bottom-right (below right right)
+          corner (corner-split painter (dec n))]
+      (beside (up-split painter n)
+              (below bottom-right corner)))))
