@@ -855,3 +855,11 @@
   (let [combine (square-of-four flip-horiz identity
                                 (partial rotate 180) flip-vert)]
     (combine (corner-split painter n))))
+
+(defn split [primary secondary]
+  (fn [painter]
+    (primary painter
+             (secondary painter painter))))
+
+(def right-split-2 (split beside below))
+(def up-split-2 (split below beside))
