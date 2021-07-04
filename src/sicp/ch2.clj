@@ -863,3 +863,32 @@
 
 (def right-split-2 (split beside below))
 (def up-split-2 (split below beside))
+
+(def make-frame "'(origin edge1 edge2)" list)
+(def origin-frame car)
+(def edge1-frame (comp car cdr))
+(def edge2-frame (comp car cdr cdr))
+
+(def make-vect "'(x y)" cons)
+(def xcor-vect car)
+(def ycor-vect cdr)
+
+(defn add-vect [a b]
+  (make-vect (+ (xcor-vect a) (xcor-vect b))
+             (+ (ycor-vect a) (ycor-vect b))))
+
+(defn scale-vect [s v]
+  (make-vect (* s (xcor-vect v))
+             (* s (ycor-vect v))))
+
+(defn sub-vect [x y]
+  (add-vect x (scale-vect -1 y)))
+
+(defn frame-coord-map [frame]
+  (fn [v]
+    (add-vect
+     (origin-frame frame)
+     (add-vect (scale-vect (xcor-vect v)
+                           (edge1-frame frame))
+               (scale-vect (ycor-vect v)
+                           (edge2-frame frame))))))
