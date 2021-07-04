@@ -758,6 +758,17 @@
     (.setData result (.getData reflected-a))
     result))
 
+(defn rotate [degrees ^BufferedImage a]
+  (let [width (.getWidth a nil)
+        height (.getHeight a nil)
+        result (BufferedImage. width height BufferedImage/TYPE_INT_RGB)
+        f (AffineTransform/getRotateInstance (Math/toRadians degrees)
+                                             (+ (.getMinX a) (/ width 2))
+                                             (+ (.getMinY a) (/ height 2)))
+        rotated-a (apply-transform f a width height)]
+    (.setData result (.getData rotated-a))
+    result))
+
 (defn beside [^BufferedImage a ^BufferedImage b]
   (let [w-a (.getWidth a nil)
         w-b (.getWidth b nil)
@@ -786,6 +797,14 @@
         result (BufferedImage. w h BufferedImage/TYPE_INT_RGB)
         ^Graphics2D g (.createGraphics result)]
     (.drawImage g (reflect-x painter) nil 0 0)
+    result))
+
+(defn flip-horiz [^BufferedImage painter]
+  (let [w (.getWidth painter nil)
+        h (.getHeight painter nil)
+        result (BufferedImage. w h BufferedImage/TYPE_INT_RGB)
+        ^Graphics2D g (.createGraphics result)]
+    (.drawImage g (reflect-y painter) nil 0 0)
     result))
 
 (def barton
@@ -821,3 +840,18 @@
           corner (corner-split painter (dec n))]
       (beside (up-split painter n)
               (below bottom-right corner)))))
+
+(defn square-of-four [tl tr bl br]
+  (fn [painter]
+    (let [top (beside (tl painter) (tr painter))
+          bottom (beside (bl painter) (br painter))]
+      (below top bottom))))
+
+(def flipped-pairs-2
+  (square-of-four identity flip-vert
+                  identity flip-vert))
+
+(defn square-limit [painter n]
+  (let [combine (square-of-four flip-horiz identity
+                                (partial rotate 180) flip-vert)]
+    (combine (corner-split painter n))))
