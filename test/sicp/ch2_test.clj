@@ -762,3 +762,28 @@
           (queen-cols (dec k))))
    (enumerate-interval 1 board-size))
 
+(deftest add-vect-test
+  (is (= (ch2/make-vect 5 5)
+         (ch2/add-vect (ch2/make-vect 2 3)
+                       (ch2/make-vect 3 2))))
+
+  (is (= (ch2/make-vect 0 0)
+         (ch2/add-vect (ch2/make-vect 1 1)
+                       (ch2/make-vect -1 -1)))))
+
+(deftest scale-vect-test
+  (is (= (ch2/make-vect 0 0)
+         (ch2/scale-vect 0 (ch2/make-vect 1 1))))
+
+  (is (= (ch2/make-vect 5 10)
+         (ch2/scale-vect 5 (ch2/make-vect 1 2)))))
+
+(deftest sub-vect-test
+  (is (= (ch2/make-vect -1 1)
+         (ch2/sub-vect (ch2/make-vect 2 3)
+                       (ch2/make-vect 3 2))))
+
+  (is (= (ch2/make-vect 2 2)
+         (ch2/sub-vect (ch2/make-vect 1 1)
+                       (ch2/make-vect -1 -1)))))
+
