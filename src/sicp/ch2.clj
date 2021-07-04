@@ -892,3 +892,17 @@
                            (edge1-frame frame))
                (scale-vect (ycor-vect v)
                            (edge2-frame frame))))))
+
+(defn make-frame-a [origin edge1 edge2]
+  (list origin edge1 edge2))
+
+(def origin-frame-a car)
+(def edge1-frame-a (comp car cdr))
+(def edge2-frame-a (comp car cdr cdr))
+
+(defn make-frame-b [origin edge1 edge2]
+  (cons origin (cons edge1 edge2)))
+
+(def origin-frame-b car)
+(def edge1-frame-b (comp car cdr))
+(def edge2-frame-b (comp cdr cdr))

@@ -787,3 +787,21 @@
          (ch2/sub-vect (ch2/make-vect 1 1)
                        (ch2/make-vect -1 -1)))))
 
+(deftest make-frame-a-test
+  (is (= 0 (ch2/origin-frame-a (ch2/make-frame-a 0 1 2))))
+  (is (= 1 (ch2/edge1-frame-a (ch2/make-frame-a 0 1 2))))
+  (is (= 2 (ch2/edge2-frame-a (ch2/make-frame-a 0 1 2))))
+
+  (is (= 3 (ch2/origin-frame-a (ch2/make-frame-a 3 4 5))))
+  (is (= 4 (ch2/edge1-frame-a (ch2/make-frame-a 3 4 5))))
+  (is (= 5 (ch2/edge2-frame-a (ch2/make-frame-a 3 4 5)))))
+
+(deftest make-frame-b-test
+  (is (= 0 (ch2/origin-frame-b (ch2/make-frame-b 0 1 2))))
+  (is (= 1 (ch2/edge1-frame-b (ch2/make-frame-b 0 1 2))))
+  (is (= 2 (ch2/edge2-frame-b (ch2/make-frame-b 0 1 2))))
+
+  (is (= 3 (ch2/origin-frame-b (ch2/make-frame-b 3 4 5))))
+  (is (= 4 (ch2/edge1-frame-b (ch2/make-frame-b 3 4 5))))
+  (is (= 5 (ch2/edge2-frame-b (ch2/make-frame-b 3 4 5)))))
+
