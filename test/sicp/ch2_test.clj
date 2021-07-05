@@ -805,3 +805,7 @@
   (is (= 4 (ch2/edge1-frame-b (ch2/make-frame-b 3 4 5))))
   (is (= 5 (ch2/edge2-frame-b (ch2/make-frame-b 3 4 5)))))
 
+(deftest memq-test
+  (is (false? (ch2/memq 'apple (ch2/scheme-quote (pear banana prune)))))
+  (is (= (ch2/into-cons '(apple pear))
+         (ch2/memq 'apple (ch2/scheme-quote (x (apple sauce) y apple pear))))))

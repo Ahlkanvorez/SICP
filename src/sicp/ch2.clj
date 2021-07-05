@@ -1032,3 +1032,32 @@
 
 (def rotate-180 (comp rotate-90 rotate-90))
 (def rotate-270 (comp rotate-90 rotate-180))
+
+(defn coll->cons [coll]
+  (loop [accum nil
+         coll coll]
+    (if-let [x (first coll)]
+      (recur (cons x accum) (rest coll))
+      (reverse accum))))
+
+(defn into-cons [form]
+  (if (instance? java.util.Collection form)
+    (map into-cons (coll->cons form))
+    form))
+
+(defn memq [item x]
+  (cond (nil? x) false
+        (= item (car x)) x
+        :else (recur item (cdr x))))
+
+(defmacro scheme-quote [expr]
+  `(into-cons '~expr))
+
+;; ex 2.53
+;; (list 'a 'b 'c) => '(a b c)
+;; (list (list 'george)) => '((george))
+;; (cdr '((x1 x2) (y1 y2))) => '((y1 y2))
+;; (cadr '((x1 x2) (y1 y2))) => '(y1 y2)
+;; (pair? (car '(a short list))) => false
+;; (memq 'red '((red shoes) (blue socks))) => false
+;; (memq 'red '(red shoes blue socks)) => '(red shoes blue socks)
