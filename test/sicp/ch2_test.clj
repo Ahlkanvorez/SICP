@@ -813,6 +813,35 @@
 (deftest scheme-equal?-test
   (is (ch2/scheme-equal? (ch2/scheme-quote (this is a list))
                          (ch2/scheme-quote (this is a list))))
-
   (is (not (ch2/scheme-equal? (ch2/scheme-quote (this is a list))
                               (ch2/scheme-quote (this (is a) list))))))
+
+(deftest deriv-test
+  (is (= 1
+         (ch2/deriv (ch2/scheme-quote (+ x 3))
+                    'x)))
+  (is (= 'y
+         (ch2/deriv (ch2/scheme-quote (* x y))
+                    'x)))
+  (is (= (ch2/scheme-quote (+ (* x y) (* y (+ x 3))))
+         (ch2/deriv (ch2/scheme-quote (* (* x y) (+ x 3)))
+                    'x)))
+  (is (zero? (ch2/deriv (ch2/scheme-quote (** x 0))
+                        'x)))
+  (is (= 1 (ch2/deriv (ch2/scheme-quote (** x 1))
+                      'x)))
+  (is (= (ch2/scheme-quote (* 2 x))
+         (ch2/deriv (ch2/scheme-quote (** x 2))
+                    'x)))
+  (is (= (ch2/scheme-quote (* 3 (** x 2)))
+         (ch2/deriv (ch2/scheme-quote (** x 3))
+                    'x)))
+  (is (= (ch2/scheme-quote (* n (** x (+ n -1))))
+         (ch2/deriv (ch2/scheme-quote (** x n))
+                    'x))))
+
+(deftest exponentiation-test
+  (is (ch2/exponentiation? (ch2/make-exponentiation 'a 'b)))
+  (is (= 'a (ch2/base (ch2/make-exponentiation 'a 'b))))
+  (is (= 'b (ch2/exponent (ch2/make-exponentiation 'a 'b)))))
+

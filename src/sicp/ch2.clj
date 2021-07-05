@@ -1078,3 +1078,65 @@
 ;; which evaluates to the structure
 ;; (car (list 'quote abracadabra))
 ;; thus the car is quote.
+
+(declare variable? same-variable?
+         sum? addend augend make-sum
+         product? multiplier multiplicand make-product
+         exponentiation? base exponent make-exponentiation)
+
+(defn deriv [exp var]
+  (cond (number? exp) 0
+        (variable? exp) (if (same-variable? exp var) 1 0)
+        (sum? exp)
+        (make-sum (deriv (addend exp) var)
+                  (deriv (augend exp) var))
+        (product? exp)
+        (make-sum
+         (make-product (multiplier exp)
+                       (deriv (multiplicand exp) var))
+         (make-product (deriv (multiplier exp) var)
+                       (multiplicand exp)))
+        (exponentiation? exp)
+        (make-product
+         (make-product
+          (exponent exp)
+          (make-exponentiation (base exp)
+                               (make-sum (exponent exp) -1)))
+         (deriv (base exp) var))
+        :else (throw (ex-info "Unknown expression type -- DERIV"
+                              {:exp exp :var var}))))
+
+(def variable? symbol?)
+(defn same-variable? [a b]
+  (and (variable? a) (variable? b) (= a b)))
+
+(defn make-sum [a b]
+  (cond (= a 0) b
+        (= b 0) a
+        (and (number? a) (number? b)) (+ a b)
+        :else (list '+ a b)))
+
+(defn sum? [x] (and (pair? x) (= (car x) '+)))
+(def addend (comp car cdr))
+(def augend (comp car cdr cdr))
+
+(defn make-product [a b]
+  (cond (or (= a 0) (= b 0)) 0
+        (= a 1) b
+        (= b 1) a
+        (and (number? a) (number? b)) (* a b)
+        :else (list '* a b)))
+
+(defn product? [x] (and (pair? x) (= (car x) '*)))
+(def multiplier (comp car cdr))
+(def multiplicand (comp car cdr cdr))
+
+(defn make-exponentiation [b n]
+  (cond (= n 0) 1
+        (= n 1) b
+        (and (number? b) (number? n)) (fast-expt-iter b n)
+        :else (list '** b n)))
+
+(defn exponentiation? [x] (and (pair? x) (= (car x) '**)))
+(def base (comp car cdr))
+(def exponent (comp car cdr cdr))
