@@ -809,3 +809,10 @@
   (is (false? (ch2/memq 'apple (ch2/scheme-quote (pear banana prune)))))
   (is (= (ch2/into-cons '(apple pear))
          (ch2/memq 'apple (ch2/scheme-quote (x (apple sauce) y apple pear))))))
+
+(deftest scheme-equal?-test
+  (is (ch2/scheme-equal? (ch2/scheme-quote (this is a list))
+                         (ch2/scheme-quote (this is a list))))
+
+  (is (not (ch2/scheme-equal (ch2/scheme-quote (this is a list))
+                             (ch2/scheme-quote (this (is a) list))))))

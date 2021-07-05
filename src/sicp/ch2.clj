@@ -32,6 +32,9 @@
          (= front (.-front other))
          (= back (.-back other)))))
 
+(defn pair? [p]
+  (instance? Pair p))
+
 (defmethod print-method Pair [pair writer]
   (print-simple (str pair) writer))
 
@@ -1061,3 +1064,9 @@
 ;; (pair? (car '(a short list))) => false
 ;; (memq 'red '((red shoes) (blue socks))) => false
 ;; (memq 'red '(red shoes blue socks)) => '(red shoes blue socks)
+
+(defn scheme-equal? [a b]
+  (if (and (pair? a) (pair? b))
+    (and (= (car a) (car b))
+         (scheme-equal? (cdr a) (cdr b)))
+    (= a b)))
