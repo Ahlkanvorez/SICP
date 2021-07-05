@@ -960,3 +960,12 @@
                      (make-line-segment (make-vect 0 1)
                                         (make-vect 0 0))])))
 
+(def draw-x
+  (partial draw-fn
+           (partial segments->painter
+                    [(make-line-segment (make-vect 0 0)
+                                        (make-vect 1 1))
+                     (make-line-segment (make-vect 0 1)
+                                        (make-vect 1 0))])))
+
+
