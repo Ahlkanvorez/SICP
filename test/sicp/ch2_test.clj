@@ -814,5 +814,5 @@
   (is (ch2/scheme-equal? (ch2/scheme-quote (this is a list))
                          (ch2/scheme-quote (this is a list))))
 
-  (is (not (ch2/scheme-equal (ch2/scheme-quote (this is a list))
-                             (ch2/scheme-quote (this (is a) list))))))
+  (is (not (ch2/scheme-equal? (ch2/scheme-quote (this is a list))
+                              (ch2/scheme-quote (this (is a) list))))))
