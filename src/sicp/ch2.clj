@@ -1070,3 +1070,11 @@
     (and (= (car a) (car b))
          (scheme-equal? (cdr a) (cdr b)))
     (= a b)))
+
+;; ex 2.55
+;; (car ''abracadabra)
+;; is syntactic short-hand for
+;; (car (quote (quote abracadabra)))
+;; which evaluates to the structure
+;; (car (list 'quote abracadabra))
+;; thus the car is quote.
