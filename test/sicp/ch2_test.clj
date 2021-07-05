@@ -824,7 +824,7 @@
          (ch2/deriv (ch2/scheme-quote (* x y))
                     'x)))
   (is (= (ch2/scheme-quote (+ (* x y) (* y (+ x 3))))
-         (ch2/deriv (ch2/scheme-quote (* (* x y) (+ x 3)))
+         (ch2/deriv (ch2/scheme-quote (* x y (+ x 3)))
                     'x)))
   (is (zero? (ch2/deriv (ch2/scheme-quote (** x 0))
                         'x)))

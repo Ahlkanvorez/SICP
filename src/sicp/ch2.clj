@@ -1110,26 +1110,46 @@
 (defn same-variable? [a b]
   (and (variable? a) (variable? b) (= a b)))
 
-(defn make-sum [a b]
-  (cond (= a 0) b
-        (= b 0) a
-        (and (number? a) (number? b)) (+ a b)
-        :else (list '+ a b)))
+(defn make-sum [a & b]
+  (let [b (if (< 1 (count b))
+            (apply make-sum (first b) (rest b))
+            (first b))]
+    (cond (= a 0) b
+          (= b 0) a
+          (and (number? a) (number? b)) (+ a b)
+          :else
+          (if (sum? b)
+            (cons '+ (cons a (cdr b)))
+            (list '+ a b)))))
 
 (defn sum? [x] (and (pair? x) (= (car x) '+)))
 (def addend (comp car cdr))
-(def augend (comp car cdr cdr))
+(defn augend [sum]
+  (let [b (cdr (cdr sum))]
+    (if (= 1 (length b))
+      (car b)
+      (cons '+ b))))
 
-(defn make-product [a b]
-  (cond (or (= a 0) (= b 0)) 0
-        (= a 1) b
-        (= b 1) a
-        (and (number? a) (number? b)) (* a b)
-        :else (list '* a b)))
+(defn make-product [a & b]
+  (let [b (if (< 1 (count b))
+            (apply make-product (first b) (rest b))
+            (first b))]
+    (cond (or (= a 0) (= b 0)) 0
+          (= a 1) b
+          (= b 1) a
+          (and (number? a) (number? b)) (* a b)
+          :else
+          (if (product? b)
+            (cons '* (cons a (cdr b)))
+            (list '* a b)))))
 
 (defn product? [x] (and (pair? x) (= (car x) '*)))
 (def multiplier (comp car cdr))
-(def multiplicand (comp car cdr cdr))
+(defn multiplicand [prod]
+  (let [b (cdr (cdr prod))]
+    (if (= 1 (length b))
+      (car b)
+      (cons '* b))))
 
 (defn make-exponentiation [b n]
   (cond (= n 0) 1
