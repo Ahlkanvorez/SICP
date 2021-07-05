@@ -968,4 +968,14 @@
                      (make-line-segment (make-vect 0 1)
                                         (make-vect 1 0))])))
 
-
+(def draw-diamond
+  (partial draw-fn
+           (partial segments->painter
+                    [(make-line-segment (make-vect 0 0.5)
+                                        (make-vect 0.5 0))
+                     (make-line-segment (make-vect 0.5 0)
+                                        (make-vect 1 0.5))
+                     (make-line-segment (make-vect 1 0.5)
+                                        (make-vect 0.5 1))
+                     (make-line-segment (make-vect 0.5 1)
+                                        (make-vect 0 0.5))])))
