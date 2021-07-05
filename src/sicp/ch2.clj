@@ -906,3 +906,57 @@
 (def origin-frame-b car)
 (def edge1-frame-b (comp car cdr))
 (def edge2-frame-b (comp cdr cdr))
+
+(defn draw-line [^Graphics g]
+  (fn [start end]
+    (.drawLine g
+               (xcor-vect start)
+               (ycor-vect start)
+               (xcor-vect end)
+               (ycor-vect end))))
+
+(def make-line-segment cons)
+(def start-line-segment car)
+(def end-line-segment cdr)
+
+(defn segments->painter [segments ^Graphics g]
+  (let [draw-line (draw-line g)]
+    (fn [frame]
+      (doseq [segment segments]
+        (let [frame-coords (frame-coord-map frame)
+              start (frame-coords (start-line-segment segment))
+              end (frame-coords (end-line-segment segment))]
+          (draw-line start end))))))
+
+(defn draw-fn [draw-fn frame]
+  (doto (JFrame. "SICP Drawings")
+    (.addWindowListener (proxy [WindowAdapter] []
+                          (windowClosing [^WindowEvent e]
+                            (println :closing))))
+    (.add (proxy [Component] []
+            (getPreferredSize []
+              (Dimension. (xcor-vect (edge1-frame frame))
+                          (ycor-vect (edge2-frame frame))))
+            (paint [^Graphics g]
+              (.setColor g java.awt.Color/RED)
+              ((draw-fn g) frame))))
+    (.pack)
+    (.setVisible true)))
+
+(defn frame-of-size [width height]
+  (make-frame (make-vect 0 0)
+              (make-vect width 0)
+              (make-vect 0 height)))
+
+(def draw-borders
+  (partial draw-fn
+           (partial segments->painter
+                    [(make-line-segment (make-vect 0 0)
+                                        (make-vect 1 0))
+                     (make-line-segment (make-vect 1 0)
+                                        (make-vect 1 1))
+                     (make-line-segment (make-vect 1 1)
+                                        (make-vect 0 1))
+                     (make-line-segment (make-vect 0 1)
+                                        (make-vect 0 0))])))
+
