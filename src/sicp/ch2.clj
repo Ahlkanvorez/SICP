@@ -949,33 +949,86 @@
               (make-vect 0 height)))
 
 (def draw-borders
-  (partial draw-fn
-           (partial segments->painter
-                    [(make-line-segment (make-vect 0 0)
-                                        (make-vect 1 0))
-                     (make-line-segment (make-vect 1 0)
-                                        (make-vect 1 1))
-                     (make-line-segment (make-vect 1 1)
-                                        (make-vect 0 1))
-                     (make-line-segment (make-vect 0 1)
-                                        (make-vect 0 0))])))
+  (partial segments->painter
+           [(make-line-segment (make-vect 0 0)
+                               (make-vect 1 0))
+            (make-line-segment (make-vect 1 0)
+                               (make-vect 1 1))
+            (make-line-segment (make-vect 1 1)
+                               (make-vect 0 1))
+            (make-line-segment (make-vect 0 1)
+                               (make-vect 0 0))]))
 
 (def draw-x
-  (partial draw-fn
-           (partial segments->painter
-                    [(make-line-segment (make-vect 0 0)
-                                        (make-vect 1 1))
-                     (make-line-segment (make-vect 0 1)
-                                        (make-vect 1 0))])))
+  (partial segments->painter
+           [(make-line-segment (make-vect 0 0)
+                               (make-vect 1 1))
+            (make-line-segment (make-vect 0 1)
+                               (make-vect 1 0))]))
 
 (def draw-diamond
-  (partial draw-fn
-           (partial segments->painter
-                    [(make-line-segment (make-vect 0 0.5)
-                                        (make-vect 0.5 0))
-                     (make-line-segment (make-vect 0.5 0)
-                                        (make-vect 1 0.5))
-                     (make-line-segment (make-vect 1 0.5)
-                                        (make-vect 0.5 1))
-                     (make-line-segment (make-vect 0.5 1)
-                                        (make-vect 0 0.5))])))
+  (partial segments->painter
+           [(make-line-segment (make-vect 0 0.5)
+                               (make-vect 0.5 0))
+            (make-line-segment (make-vect 0.5 0)
+                               (make-vect 1 0.5))
+            (make-line-segment (make-vect 1 0.5)
+                               (make-vect 0.5 1))
+            (make-line-segment (make-vect 0.5 1)
+                               (make-vect 0 0.5))]))
+
+(defn transform-painter [painter origin corner1 corner2]
+  (fn [frame]
+    (let [m (frame-coord-map frame)
+          new-origin (m origin)]
+      (painter
+       (make-frame new-origin
+                   (sub-vect (m corner1) new-origin)
+                   (sub-vect (m corner2) new-origin))))))
+
+(defn painter-flip-vert [painter]
+  (transform-painter painter
+                     (make-vect 0 1)
+                     (make-vect 1 1)
+                     (make-vect 0 0)))
+
+(defn shrink-to-upper-right [painter]
+  (transform-painter painter
+                     (make-vect 0.5 0.5)
+                     (make-vect 1 0.5)
+                     (make-vect 0.5 1)))
+
+(defn rotate-90 [painter]
+  (transform-painter painter
+                     (make-vect 1 0)
+                     (make-vect 1 1)
+                     (make-vect 0 0)))
+
+(defn squash-inwards [painter]
+  (transform-painter painter
+                     (make-vect 0 0)
+                     (make-vect 0.65 0.35)
+                     (make-vect 0.35 0.65)))
+
+(defn painter-beside [p1 p2]
+  (let [split-point (make-vect 0.5 0)
+        paint-left (transform-painter p1
+                                      (make-vect 0 0)
+                                      split-point
+                                      (make-vect 0 1))
+        paint-right (transform-painter p2
+                                       split-point
+                                       (make-vect 1 0)
+                                       (make-vect 0.5 1))]
+    (fn [frame]
+      (paint-left frame)
+      (paint-right frame))))
+
+(defn painter-flip-horiz [painter]
+  (transform-painter painter
+                     (make-vect 1 0)
+                     (make-vect 1 1)
+                     (make-vect 0 0)))
+
+(def rotate-180 (comp rotate-90 rotate-90))
+(def rotate-270 (comp rotate-90 rotate-180))
