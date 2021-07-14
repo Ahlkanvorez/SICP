@@ -845,3 +845,30 @@
   (is (= 'a (ch2/base (ch2/make-exponentiation 'a 'b))))
   (is (= 'b (ch2/exponent (ch2/make-exponentiation 'a 'b)))))
 
+(deftest infix-deriv-test
+  (is (= 1
+         (ch2/infix-deriv (ch2/scheme-quote (x + 3))
+                          'x)))
+  (is (= 'y
+         (ch2/infix-deriv (ch2/scheme-quote (x * y))
+                          'x)))
+  (is (= (ch2/scheme-quote ((x * y) + (y * (x + 3))))
+         (ch2/infix-deriv (ch2/scheme-quote ((x * y) * (x + 3)))
+                          'x)))
+  (is (zero? (ch2/infix-deriv (ch2/scheme-quote (x ** 0))
+                              'x)))
+  (is (= 1 (ch2/infix-deriv (ch2/scheme-quote (x ** 1))
+                            'x)))
+  (is (= (ch2/scheme-quote (2 * x))
+         (ch2/infix-deriv (ch2/scheme-quote (x ** 2))
+                          'x)))
+  (is (= (ch2/scheme-quote (3 * (x ** 2)))
+         (ch2/infix-deriv (ch2/scheme-quote (x ** 3))
+                          'x)))
+  (is (= (ch2/scheme-quote (n * (x ** (n + -1))))
+         (ch2/infix-deriv (ch2/scheme-quote (x ** n))
+                          'x)))
+
+  (is (= 4
+         (ch2/infix-deriv (ch2/scheme-quote (x + (3 * (x + (y + 2)))))
+                          'x))))

@@ -1079,36 +1079,45 @@
 ;; (car (list 'quote abracadabra))
 ;; thus the car is quote.
 
-(declare variable? same-variable?
-         sum? addend augend make-sum
-         product? multiplier multiplicand make-product
-         exponentiation? base exponent make-exponentiation)
-
-(defn deriv [exp var]
-  (cond (number? exp) 0
-        (variable? exp) (if (same-variable? exp var) 1 0)
-        (sum? exp)
-        (make-sum (deriv (addend exp) var)
-                  (deriv (augend exp) var))
-        (product? exp)
-        (make-sum
-         (make-product (multiplier exp)
-                       (deriv (multiplicand exp) var))
-         (make-product (deriv (multiplier exp) var)
-                       (multiplicand exp)))
-        (exponentiation? exp)
-        (make-product
-         (make-product
-          (exponent exp)
-          (make-exponentiation (base exp)
-                               (make-sum (exponent exp) -1)))
-         (deriv (base exp) var))
-        :else (throw (ex-info "Unknown expression type -- DERIV"
-                              {:exp exp :var var}))))
+(defn derivative
+  [{:keys
+    [variable? same-variable?
+     sum? addend augend make-sum
+     product? multiplier multiplicand make-product
+     exponentiation? base exponent make-exponentiation]}]
+  (fn deriv [exp var]
+    (cond (number? exp) 0
+          (variable? exp) (if (same-variable? exp var) 1 0)
+          (sum? exp)
+          (make-sum (deriv (addend exp) var)
+                    (deriv (augend exp) var))
+          (product? exp)
+          (make-sum
+           (make-product (multiplier exp)
+                         (deriv (multiplicand exp) var))
+           (make-product (deriv (multiplier exp) var)
+                         (multiplicand exp)))
+          (exponentiation? exp)
+          (make-product
+           (make-product
+            (exponent exp)
+            (make-exponentiation (base exp)
+                                 (make-sum (exponent exp) -1)))
+           (deriv (base exp) var))
+          :else (throw (ex-info "Unknown expression type -- DERIV"
+                                {:exp exp :var var})))))
 
 (def variable? symbol?)
 (defn same-variable? [a b]
   (and (variable? a) (variable? b) (= a b)))
+
+(defn sum? [x] (and (pair? x) (= (car x) '+)))
+(def addend (comp car cdr))
+(defn augend [sum]
+  (let [b (cdr (cdr sum))]
+    (if (= 1 (length b))
+      (car b)
+      (cons '+ b))))
 
 (defn make-sum [a & b]
   (let [b (if (< 1 (count b))
@@ -1122,13 +1131,13 @@
             (cons '+ (cons a (cdr b)))
             (list '+ a b)))))
 
-(defn sum? [x] (and (pair? x) (= (car x) '+)))
-(def addend (comp car cdr))
-(defn augend [sum]
-  (let [b (cdr (cdr sum))]
+(defn product? [x] (and (pair? x) (= (car x) '*)))
+(def multiplier (comp car cdr))
+(defn multiplicand [prod]
+  (let [b (cdr (cdr prod))]
     (if (= 1 (length b))
       (car b)
-      (cons '+ b))))
+      (cons '* b))))
 
 (defn make-product [a & b]
   (let [b (if (< 1 (count b))
@@ -1143,13 +1152,9 @@
             (cons '* (cons a (cdr b)))
             (list '* a b)))))
 
-(defn product? [x] (and (pair? x) (= (car x) '*)))
-(def multiplier (comp car cdr))
-(defn multiplicand [prod]
-  (let [b (cdr (cdr prod))]
-    (if (= 1 (length b))
-      (car b)
-      (cons '* b))))
+(defn exponentiation? [x] (and (pair? x) (= (car x) '**)))
+(def base (comp car cdr))
+(def exponent (comp car cdr cdr))
 
 (defn make-exponentiation [b n]
   (cond (= n 0) 1
@@ -1157,6 +1162,67 @@
         (and (number? b) (number? n)) (fast-expt-iter b n)
         :else (list '** b n)))
 
-(defn exponentiation? [x] (and (pair? x) (= (car x) '**)))
-(def base (comp car cdr))
-(def exponent (comp car cdr cdr))
+(def deriv
+  (derivative
+   {:variable? variable?
+    :same-variable? same-variable?
+    :make-sum make-sum
+    :sum? sum?
+    :addend addend
+    :augend augend
+    :product? product?
+    :multiplier multiplier
+    :multiplicand multiplicand
+    :make-product make-product
+    :exponentiation? exponentiation?
+    :base base
+    :exponent exponent
+    :make-exponentiation make-exponentiation}))
+
+(defn infix-sum? [x] (and (pair? x) (= (car (cdr x)) '+)))
+(def infix-addend car)
+(def infix-augend (comp car cdr cdr))
+
+(defn make-infix-sum [a b]
+  (cond (= a 0) b
+        (= b 0) a
+        (and (number? a) (number? b)) (+ a b)
+        :else (list a '+ b)))
+
+(defn infix-product? [x] (and (pair? x) (= (car (cdr x)) '*)))
+(def infix-multiplier car)
+(def infix-multiplicand (comp car cdr cdr))
+
+(defn make-infix-product [a b]
+  (cond (or (= a 0) (= b 0)) 0
+        (= a 1) b
+        (= b 1) a
+        (and (number? a) (number? b)) (* a b)
+        :else (list a '* b)))
+
+(defn infix-exponentiation? [x] (and (pair? x) (= (car (cdr x)) '**)))
+(def infix-base car)
+(def infix-exponent (comp car cdr cdr))
+
+(defn make-infix-exponentiation [b n]
+  (cond (= n 0) 1
+        (= n 1) b
+        (and (number? b) (number? n)) (fast-expt-iter b n)
+        :else (list b '** n)))
+
+(def infix-deriv
+  (derivative
+   {:variable? variable?
+    :same-variable? same-variable?
+    :make-sum make-infix-sum
+    :sum? infix-sum?
+    :addend infix-addend
+    :augend infix-augend
+    :product? infix-product?
+    :multiplier infix-multiplier
+    :multiplicand infix-multiplicand
+    :make-product make-infix-product
+    :exponentiation? infix-exponentiation?
+    :base infix-base
+    :exponent infix-exponent
+    :make-exponentiation make-infix-exponentiation}))
