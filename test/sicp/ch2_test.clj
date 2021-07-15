@@ -868,7 +868,69 @@
   (is (= (ch2/scheme-quote (n * (x ** (n + -1))))
          (ch2/infix-deriv (ch2/scheme-quote (x ** n))
                           'x)))
-
   (is (= 4
          (ch2/infix-deriv (ch2/scheme-quote (x + (3 * (x + (y + 2)))))
                           'x))))
+
+(deftest lowest-precedence-op-in-test
+  (is (= '+ (ch2/lowest-precendence-op-in
+             (ch2/scheme-quote (x + 3 * (x + y + 2) ** 2)))))
+  (is (= '* (ch2/lowest-precendence-op-in
+             (ch2/scheme-quote (x ** 3 * (x + y + 2))))))
+  (is (= '** (ch2/lowest-precendence-op-in
+              (ch2/scheme-quote (x ** (x + y + 2)))))))
+
+(deftest parenthesize-standard-infix-expression-test
+  (is (= (ch2/scheme-quote (x + (3 * (x + y + 2) ** 2)))
+         (ch2/parenthesize-standard-infix-expression
+          (ch2/scheme-quote (x + 3 * (x + y + 2) ** 2)))))
+  (is (= (ch2/scheme-quote (3 * ((x + y + 2) ** 2)))
+         (ch2/parenthesize-standard-infix-expression
+          (ch2/scheme-quote (3 * (x + y + 2) ** 2)))))
+  (is (= (ch2/scheme-quote ((x + y + 2) ** (2 ** 3)))
+         (ch2/parenthesize-standard-infix-expression
+          (ch2/scheme-quote ((x + y + 2) ** 2 ** 3))))))
+
+(deftest standard-infix-deriv-test
+  (is (= 1
+         (ch2/standard-infix-deriv
+          (ch2/scheme-quote (x + 3))
+          'x)))
+  (is (= 'y
+         (ch2/standard-infix-deriv
+          (ch2/scheme-quote (x * y))
+          'x)))
+  (is (= (ch2/scheme-quote ((x * y) + (y * (x + 3))))
+         (ch2/standard-infix-deriv
+          (ch2/scheme-quote ((x * y) * (x + 3)))
+          'x)))
+  (is (zero? (ch2/standard-infix-deriv
+              (ch2/scheme-quote (x ** 0))
+              'x)))
+  (is (= 1 (ch2/standard-infix-deriv
+            (ch2/scheme-quote (x ** 1))
+            'x)))
+  (is (= (ch2/scheme-quote (2 * x))
+         (ch2/standard-infix-deriv
+          (ch2/scheme-quote (x ** 2))
+          'x)))
+  (is (= (ch2/scheme-quote (3 * (x ** 2)))
+         (ch2/standard-infix-deriv
+          (ch2/scheme-quote (x ** 3))
+          'x)))
+  (is (= (ch2/scheme-quote (n * (x ** (n + -1))))
+         (ch2/standard-infix-deriv
+          (ch2/scheme-quote (x ** n))
+          'x)))
+  (is (= 4
+         (ch2/standard-infix-deriv
+          (ch2/scheme-quote (x + (3 * (x + (y + 2)))))
+          'x)))
+  (is (= 4
+         (ch2/standard-infix-deriv
+          (ch2/scheme-quote (x + 3 * (x + y + 2)))
+          'x)))
+  (is (= (ch2/scheme-quote ((2 * x) + 3))
+         (ch2/standard-infix-deriv
+          (ch2/scheme-quote (x ** 2 + 3 * (x + y + 2)))
+          'x))))

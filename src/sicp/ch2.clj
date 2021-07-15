@@ -1226,3 +1226,65 @@
     :base infix-base
     :exponent infix-exponent
     :make-exponentiation make-infix-exponentiation}))
+
+(def standard-infix-operator-precedence
+  "Order of operations for standard infix; left -> right is
+  least -> greatest precedence."
+  (scheme-quote (+ * **)))
+
+(defn lowest-precendence-op-in [expression]
+  (loop [ops standard-infix-operator-precedence]
+    (when-let [op (car ops)]
+      (if (nil? (filter (partial = op) expression))
+        (recur (cdr ops))
+        op))))
+
+(defn parenthesize-standard-infix-expression [expression]
+  (let [op (lowest-precendence-op-in expression)]
+    (loop [lhs nil
+           expression expression]
+      (when-let [v (car expression)]
+        (if (= op v)
+          (let [lhs (if (= (length lhs) 1) (car lhs) (reverse lhs))
+                rhs (cdr expression)
+                rhs (if (= (length rhs) 1) (car rhs) rhs)]
+            (list lhs v rhs))
+          (recur (cons v lhs) (cdr expression)))))))
+
+(defn standard-infix-sum? [x]
+  (and (pair? x) (= (lowest-precendence-op-in x) '+)))
+(def standard-infix-addend
+  (comp car parenthesize-standard-infix-expression))
+(def standard-infix-augend
+  (comp car cdr cdr parenthesize-standard-infix-expression))
+
+(defn standard-infix-product? [x]
+  (and (pair? x) (= (lowest-precendence-op-in x) '*)))
+(def standard-infix-multiplier
+  (comp car parenthesize-standard-infix-expression))
+(def standard-infix-multiplicand
+  (comp car cdr cdr parenthesize-standard-infix-expression))
+
+(defn standard-infix-exponentiation? [x]
+  (and (pair? x) (= (lowest-precendence-op-in x) '**)))
+(def standard-infix-base
+  (comp car parenthesize-standard-infix-expression))
+(def standard-infix-exponent
+  (comp car cdr cdr parenthesize-standard-infix-expression))
+
+(def standard-infix-deriv
+  (derivative
+   {:variable? variable?
+    :same-variable? same-variable?
+    :make-sum make-infix-sum
+    :sum? standard-infix-sum?
+    :addend standard-infix-addend
+    :augend standard-infix-augend
+    :product? standard-infix-product?
+    :multiplier standard-infix-multiplier
+    :multiplicand standard-infix-multiplicand
+    :make-product make-infix-product
+    :exponentiation? standard-infix-exponentiation?
+    :base standard-infix-base
+    :exponent standard-infix-exponent
+    :make-exponentiation make-infix-exponentiation}))
